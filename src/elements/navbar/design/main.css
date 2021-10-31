@@ -1,0 +1,125 @@
+:root {
+  --text-primary: rgb(214, 214, 214);
+  --navbar-height: 100px;
+  /* --nav__page-links-width: 400px; */
+  --nav__social-links-width: 150px;
+}
+
+/* =========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+/* =========================================== */
+
+body {
+  margin: 0;
+  font-family: 'Poppins', arial;
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+/* =========================================== */
+
+nav {
+  height: var(--navbar-height);
+  background: darkorchid;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 7%;
+}
+
+/* =========================================== */
+
+nav > ul {
+  padding-left: 0;
+}
+
+/* =========================================== */
+
+nav > ul > li {
+  list-style: none;
+}
+
+/* =========================================== */
+
+nav > .nav__page-links {
+  /* border: solid hotpink 2px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: var(--nav__page-links-width);
+}
+
+/* =========================================== */
+
+nav > .nav__social-links {
+  /* border: solid darkorange 2px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: var(--nav__social-links-width);
+  /* height: 100%; */
+}
+
+/* =========================================== */
+
+nav > .nav__social-links > li {
+  /* border: dashed green 2px; */
+}
+
+/* =========================================== */
+
+nav > .nav__social-links > li > a {
+  /* border: dotted hotpink 2px; */
+  display: flex;
+}
+
+/* =========================================== */
+
+nav > .nav__social-links > li > a > svg {
+  /* border: dotted blue 2px; */
+  text-align: center;
+  margin: auto;
+  color: var(--text-primary);
+}
+
+/* =========================================== */
+
+nav > .nav__hamburger {
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  border: solid 2px var(--text-primary);
+  border-radius: 15%;
+}
+
+/* =========================================== */
+
+/* Screen width: [0px, 768px] */
+@media screen and (max-width: 768px) {
+  .fullscreen {
+    display: none !important;
+  }
+  :root {
+    --nav__page-links-width: calc(400px / 2);
+  }
+}
+
+/* =========================================== */
+
+/* Screen width: [769px, infinity) */
+@media screen and (min-width: 769px) {
+  .mobile {
+    display: none;
+  }
+  :root {
+    --nav__page-links-width: 400px;
+  }
+}
+
+/* =========================================== */

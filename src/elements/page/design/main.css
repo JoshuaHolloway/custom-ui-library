@@ -1,0 +1,26 @@
+:root {
+  --navbar-height: 100px;
+  --footer-height: 100px;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  /* width: 100vw; */
+
+  display: grid;
+  grid-template-rows: var(--navbar-height) 1fr var(--footer-height);
+  grid-template-columns: 100%;
+}
+
+nav {
+  background: darkorchid;
+}
+
+main {
+  background: darkorange;
+}
+
+footer {
+  background: hotpink;
+}
