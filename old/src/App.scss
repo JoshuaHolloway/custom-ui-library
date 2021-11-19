@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background: hotpink;
+}
+
+#root {
+  height: 100%;
+  border: solid yellow 2px;
+}
+.blur-container {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}

@@ -1,0 +1,18 @@
+.navdrawer {
+  z-index: 10;
+  position: fixed;
+  background: darkorange;
+  height: 100vh;
+
+  $w: 100px;
+
+  width: $w;
+  top: 0;
+  left: -$w; //calc(50% - 50px);
+  display: grid;
+  place-items: center;
+}
+
+.hide {
+  display: none;
+}
