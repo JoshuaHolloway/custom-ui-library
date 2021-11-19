@@ -1,6 +1,6 @@
 export default function Layout({ children }) {
-  const nav_height = '100px';
-  const drawer_width = '400px';
+  const nav_height = '7vh';
+  const drawer_width = '25vw';
 
   return (
     <div style={{ position: 'relative' }}>

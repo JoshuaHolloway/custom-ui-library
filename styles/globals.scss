@@ -22,7 +22,7 @@ $color-3: hsla(120, 100%, 15%, 1);
 // ==============================================
 // Chrome and Safari
 ::-webkit-scrollbar {
-  width: 2em;
+  width: 2vw;
   /* background: red; */
 }
 
@@ -35,7 +35,7 @@ $color-3: hsla(120, 100%, 15%, 1);
 ::-webkit-scrollbar-thumb {
   background: $color-2;
   border-radius: 100vw;
-  border: 0.25em solid $color-1;
+  border: 0.4vw solid $color-1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
