@@ -11,8 +11,6 @@ $clr-accent-400: var(--clr-accent-400);
   border-radius: 0.5rem;
   overflow: hidden; // the gradient overlay's corners are not rounded and spill over
 
-  transition: transform 250ms ease;
-
   .card_content {
     --padding: 1.5rem; // locally scoped
     padding: var(--padding);
@@ -27,6 +25,10 @@ $clr-accent-400: var(--clr-accent-400);
   //  can hover, then .card_content
   //  gets the following properties:
   @media (hover) {
+    // .card
+    & {
+      transition: transform 250ms ease;
+    }
     // .card:hover,
     // .card:focus-within
     &:hover,
