@@ -25,10 +25,13 @@ export default function Layout({ children }) {
 
       <div
         style={{
-          height: '100vh',
+          position: 'fixed',
+          top: nav_height,
+          left: drawer_width,
+          height: `calc(100vh - ${nav_height})`,
+          width: `calc(100% - ${drawer_width})`,
           overflowY: 'scroll',
-          paddingTop: nav_height,
-          paddingLeft: drawer_width,
+          // paddingLeft: drawer_width,
           border: 'solid hotpink 5px',
         }}
       >
