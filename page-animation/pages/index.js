@@ -23,40 +23,37 @@ export default function HomePage() {
 
   // --------------------------------------------
 
-  useEffect(() => {
-    console.log('prev_page: ', prev_page, '\tpage: ', page);
-
-    if (mounted) {
-      if (prev_page < page) {
-        tl_ref.current.push(
-          gsap
-            .timeline()
-            .to(page_ref.current[page - 1], {
-              duration: 2.5,
-              xPercent: 100,
-            })
-            .to(
-              page_ref.current[page],
-              {
-                duration: 2.5,
-                xPercent: 100,
-              },
-              '<'
-            )
-        );
-      } else {
-        tl_ref.current.pop()?.reverse();
-      }
-    }
-  }, [animTrigger]);
-
-  // --------------------------------------------
-
   const pageChangeHandler = (page_num) => () => {
     setPrevPage(page);
     setPage(page_num);
     setAnimTrigger((prev) => !prev);
+
+    // Page 1:
+    //  -0: 100%
+    //  -1: 100%
+    // Page N:
+    //  -1: 200%
+    //  -2: 100%
+
+    tl_ref.current.push(
+      gsap
+        .timeline()
+        .to(page_ref.current[page_num - 1], {
+          duration: 1,
+          xPercent: page_num == 1 ? 100 : 200,
+        })
+        .to(
+          page_ref.current[page_num],
+          {
+            duration: 1,
+            xPercent: 100,
+          },
+          '<'
+        )
+    );
   };
+
+  const pageUnchangeHandler = () => tl_ref.current.pop()?.reverse();
 
   // --------------------------------------------
 
@@ -89,24 +86,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.push(
-              gsap
-                .timeline()
-                .to(page_ref.current[0], {
-                  duration: 2.5,
-                  xPercent: 100,
-                })
-                .to(
-                  page_ref.current[1],
-                  {
-                    duration: 2.5,
-                    xPercent: 100,
-                  },
-                  '<'
-                )
-            );
-          }}
+          onClick={pageChangeHandler(1)}
         >
           <path
             fillRule='evenodd'
@@ -135,9 +115,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.pop()?.reverse();
-          }}
+          onClick={pageUnchangeHandler}
         >
           <path
             fillRule='evenodd'
@@ -151,24 +129,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.push(
-              gsap
-                .timeline()
-                .to(page_ref.current[1], {
-                  duration: 2.5,
-                  xPercent: 200,
-                })
-                .to(
-                  page_ref.current[2],
-                  {
-                    duration: 2.5,
-                    xPercent: 100,
-                  },
-                  '<'
-                )
-            );
-          }}
+          onClick={pageChangeHandler(2)}
         >
           <path
             fillRule='evenodd'
@@ -197,9 +158,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.pop()?.reverse();
-          }}
+          onClick={pageUnchangeHandler}
         >
           <path
             fillRule='evenodd'
@@ -213,24 +172,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.push(
-              gsap
-                .timeline()
-                .to(page_ref.current[2], {
-                  duration: 2.5,
-                  xPercent: 200,
-                })
-                .to(
-                  page_ref.current[3],
-                  {
-                    duration: 2.5,
-                    xPercent: 100,
-                  },
-                  '<'
-                )
-            );
-          }}
+          onClick={pageChangeHandler(3)}
         >
           <path
             fillRule='evenodd'
@@ -259,9 +201,7 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={() => {
-            tl_ref.current.pop()?.reverse();
-          }}
+          onClick={pageUnchangeHandler}
         >
           <path
             fillRule='evenodd'
