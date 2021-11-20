@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { gsap } from 'gsap';
 
+import Page from '../components/page';
+
 // ==============================================
 
 export default function HomePage() {
@@ -20,6 +22,8 @@ export default function HomePage() {
   const [animTrigger, setAnimTrigger] = useState(false);
   const [page, setPage] = useState(0);
   const [prev_page, setPrevPage] = useState();
+
+  const setPageRef = (page_num) => (el) => (page_ref.current[page_num] = el);
 
   // --------------------------------------------
 
@@ -64,15 +68,23 @@ export default function HomePage() {
     <div
       style={{
         position: 'relative',
-        border: 'solid green 2px',
+        border: 'solid green 10px',
         height: '100vh',
+        width: '100vw',
         overflowX: 'hidden',
       }}
     >
       {/* page-1 */}
       <div
         ref={(el) => (page_ref.current[0] = el)}
-        style={{ background: 'hotpink' }}
+        style={{
+          background: 'hotpink',
+          position: 'absolute',
+          top: 0,
+          left: '0',
+          width: '100%',
+          height: '100%',
+        }}
       >
         <h1>Page 1</h1>
         <svg
@@ -91,116 +103,25 @@ export default function HomePage() {
       </div>
 
       {/* page-2 */}
-      <div
-        ref={(el) => (page_ref.current[1] = el)}
-        style={{
-          background: 'deepskyblue',
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '100%',
-        }}
-      >
-        <h1>Page 2</h1>
-
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          fill='currentColor'
-          viewBox='0 0 16 16'
-          onClick={pageChangeHandler(0)}
-        >
-          <path
-            fillRule='evenodd'
-            d='M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z'
-          />
-        </svg>
-
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          fill='currentColor'
-          viewBox='0 0 16 16'
-          onClick={pageChangeHandler(2)}
-        >
-          <path
-            fillRule='evenodd'
-            d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z'
-          />
-        </svg>
-      </div>
+      <Page
+        page_num={1}
+        pageChangeHandler={pageChangeHandler}
+        setPageRef={setPageRef}
+      />
 
       {/* page-3 */}
-      <div
-        ref={(el) => (page_ref.current[2] = el)}
-        style={{
-          background: 'darkorchid',
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '100%',
-        }}
-      >
-        <h1>Page 3</h1>
-
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          fill='currentColor'
-          viewBox='0 0 16 16'
-          onClick={pageChangeHandler(1)}
-        >
-          <path
-            fillRule='evenodd'
-            d='M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z'
-          />
-        </svg>
-
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          fill='currentColor'
-          viewBox='0 0 16 16'
-          onClick={pageChangeHandler(3)}
-        >
-          <path
-            fillRule='evenodd'
-            d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z'
-          />
-        </svg>
-      </div>
+      <Page
+        page_num={2}
+        pageChangeHandler={pageChangeHandler}
+        setPageRef={setPageRef}
+      />
 
       {/* page-4 */}
-      <div
-        ref={(el) => (page_ref.current[3] = el)}
-        style={{
-          background: 'darkorange',
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '100%',
-        }}
-      >
-        <h1>Page 4</h1>
-
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          fill='currentColor'
-          viewBox='0 0 16 16'
-          onClick={pageChangeHandler(2)}
-        >
-          <path
-            fillRule='evenodd'
-            d='M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z'
-          />
-        </svg>
-      </div>
+      <Page
+        page_num={3}
+        pageChangeHandler={pageChangeHandler}
+        setPageRef={setPageRef}
+      />
     </div>
   );
 }
