@@ -89,7 +89,24 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={pageChangeHandler(1)}
+          onClick={() => {
+            tl_ref.current.push(
+              gsap
+                .timeline()
+                .to(page_ref.current[0], {
+                  duration: 2.5,
+                  xPercent: 100,
+                })
+                .to(
+                  page_ref.current[1],
+                  {
+                    duration: 2.5,
+                    xPercent: 100,
+                  },
+                  '<'
+                )
+            );
+          }}
         >
           <path
             fillRule='evenodd'
@@ -118,7 +135,9 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={pageChangeHandler(0)}
+          onClick={() => {
+            tl_ref.current.pop()?.reverse();
+          }}
         >
           <path
             fillRule='evenodd'
@@ -178,7 +197,9 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={pageChangeHandler(1)}
+          onClick={() => {
+            tl_ref.current.pop()?.reverse();
+          }}
         >
           <path
             fillRule='evenodd'
@@ -192,7 +213,24 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={pageChangeHandler(3)}
+          onClick={() => {
+            tl_ref.current.push(
+              gsap
+                .timeline()
+                .to(page_ref.current[2], {
+                  duration: 2.5,
+                  xPercent: 200,
+                })
+                .to(
+                  page_ref.current[3],
+                  {
+                    duration: 2.5,
+                    xPercent: 100,
+                  },
+                  '<'
+                )
+            );
+          }}
         >
           <path
             fillRule='evenodd'
@@ -210,6 +248,7 @@ export default function HomePage() {
           top: 0,
           left: '-100%',
           width: '100%',
+          height: '100%',
         }}
       >
         <h1>Page 3</h1>
@@ -220,7 +259,9 @@ export default function HomePage() {
           height='16'
           fill='currentColor'
           viewBox='0 0 16 16'
-          onClick={pageChangeHandler(2)}
+          onClick={() => {
+            tl_ref.current.pop()?.reverse();
+          }}
         >
           <path
             fillRule='evenodd'
