@@ -182,15 +182,26 @@ export default function Layout({ children }) {
             id='navdrawer-navitems'
             style={{
               display: 'grid',
-              gridTemplateRows: 'repeat(4, 65px)',
-              gridTemplateColumns: `${minimized_navdrawer_width} 1fr`,
-              alignItems: 'center',
+              gridTemplateRows: 'repeat(4, 45px)',
+              gridTemplateColumns: `1fr`,
+              gap: '20px',
+              // alignItems: 'center',
               minWidth: minimized_navdrawer_width,
             }}
           >
             {navdrawer_items.map((navdrawer_item, idx) => {
               return (
-                <React.Fragment key={idx}>
+                <div
+                  key={idx}
+                  style={{
+                    display: 'grid',
+                    gridTemplateRows: 'repeat(1, 100%)',
+                    gridTemplateColumns: `${minimized_navdrawer_width} 1fr`,
+                    alignItems: 'center',
+                    minWidth: minimized_navdrawer_width,
+                    cursor: 'pointer',
+                  }}
+                >
                   <div
                     style={{
                       // background: 'rgba(255, 0, 0, 0.25)',
@@ -217,7 +228,7 @@ export default function Layout({ children }) {
                   >
                     {navdrawer_item.title}
                   </span>
-                </React.Fragment>
+                </div>
               );
             })}
           </div>
