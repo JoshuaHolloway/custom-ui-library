@@ -8,7 +8,7 @@ export default function Card() {
       className='temp-container'
       style={{ display: 'grid', placeItems: 'center' }}
     >
-      <div className={css.card}>
+      <div className={`${css.card} ${css.pseudo_hover}`}>
         <div className={css.card_content}>
           <h2 className={css.card_title}>Title</h2>
           <p className={css.card_body}>

@@ -47,7 +47,11 @@ export default function HomePage() {
     );
   };
 
+  // --------------------------------------------
+
   const pageUnchangeHandler = () => tl_ref.current.pop()?.reverse();
+
+  // --------------------------------------------
 
   const setPageRef = (page_num) => (el) => (page_ref.current[page_num] = el);
 
