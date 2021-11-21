@@ -1,4 +1,35 @@
-.nav_item {
+$clr-not-selected: #8a8a98;
+$clr-selected: #f5f5ff;
+$background-surface: #0f0f13;
+$background-primary: black;
+
+.main_navdrawer {
+  background: $background-primary;
+}
+
+.navdrawer_item {
   width: 100px;
-  background: red;
+  // background: black;
+
+  color: $clr-not-selected;
+  &.selected {
+    color: $clr-selected;
+  }
+}
+
+.nav_drawer_hr {
+  border: solid 1px $background-surface;
+  border-radius: 5px;
+}
+
+.navdrawer_minmax_button {
+  color: $clr-not-selected;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  border: solid $clr-not-selected 1px;
+  border-radius: 3px;
+  padding: 3px;
+  display: grid;
+  place-items: center;
 }

@@ -104,6 +104,7 @@ export default function Layout({ children }) {
     <div style={{ position: 'relative' }}>
       <nav
         id='main-navdrawer'
+        className={css.main_navdrawer}
         ref={navdrawer_ref}
         style={{
           position: 'fixed',
@@ -111,21 +112,11 @@ export default function Layout({ children }) {
           width: navdrawer_width,
           height: '100%',
           paddingTop: navbar_height,
-          background: 'green',
         }}
       >
         <div
           id='navdrawer-minimize-button'
-          style={{
-            position: 'absolute',
-            top: '1em',
-            right: '1em',
-            border: 'solid black 2px',
-            borderRadius: '3px',
-            padding: '3px',
-            display: 'grid',
-            placeItems: 'center',
-          }}
+          className={css.navdrawer_minmax_button}
           onClick={navDrawerHandler}
         >
           <svg
@@ -142,16 +133,7 @@ export default function Layout({ children }) {
 
         <div
           id='navdrawer-maximize-button'
-          style={{
-            position: 'absolute',
-            top: '1em',
-            right: '1em',
-            border: 'solid black 2px',
-            borderRadius: '3px',
-            padding: '3px',
-            display: 'grid',
-            placeItems: 'center',
-          }}
+          className={css.navdrawer_minmax_button}
           onClick={navDrawerHandler}
         >
           {' '}
@@ -176,7 +158,7 @@ export default function Layout({ children }) {
               paddingLeft: 0,
             }}
           >
-            <li className={css.nav_item}>
+            <li className={css.navdrawer_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -190,7 +172,7 @@ export default function Layout({ children }) {
                 Users
               </span>
             </li>
-            <li className={css.nav_item}>
+            <li className={css.navdrawer_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -204,7 +186,7 @@ export default function Layout({ children }) {
                 Orders
               </span>
             </li>
-            <li className={css.nav_item}>
+            <li className={css.navdrawer_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -219,7 +201,7 @@ export default function Layout({ children }) {
               </span>
             </li>
 
-            <li className={css.nav_item}>
+            <li className={css.navdrawer_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -235,6 +217,8 @@ export default function Layout({ children }) {
             </li>
           </ul>
         </div>
+
+        <hr className={css.nav_drawer_hr} />
       </nav>
 
       <nav
