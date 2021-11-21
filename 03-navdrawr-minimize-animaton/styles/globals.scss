@@ -1,0 +1,29 @@
+:root {
+  --clr-neurtral-900: hsl(207, 19%, 9%);
+  --clr-neurtral-100: hsl(0, 0%, 100%);
+  --clr-accent-400: hsl(142, 90%, 61%);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+  background: var(--clr-neutral-900);
+}
+
+// a {
+// color: inherit;
+// text-decoration: none;
+// }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@import 'scrollbar';
