@@ -34,3 +34,14 @@ $background-primary: black;
   display: grid;
   place-items: center;
 }
+
+.main_content {
+  @supports not (overflow-y: overlay) {
+    overflow-y: scroll;
+  }
+
+  @supports (overflow-y: overlay) {
+    overflow-y: overlay;
+    background: yellow;
+  }
+}

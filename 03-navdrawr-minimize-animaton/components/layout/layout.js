@@ -233,6 +233,7 @@ export default function Layout({ children }) {
 
       <main
         id='main-content'
+        className={css.main_content}
         ref={main_content_ref}
         style={{
           position: 'fixed',
@@ -240,7 +241,7 @@ export default function Layout({ children }) {
           left: navdrawer_width,
           height: `calc(100vh - ${navbar_height})`,
           width: `calc(100% - ${navdrawer_width})`,
-          overflowY: 'scroll',
+
           border: 'solid hotpink 5px',
           background: 'red',
         }}
