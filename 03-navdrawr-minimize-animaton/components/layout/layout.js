@@ -182,24 +182,35 @@ export default function Layout({ children }) {
             id='navdrawer-navitems'
             style={{
               display: 'grid',
-              gridTemplateRows: '1fr 1fr 1fr 1fr',
-              gridTemplateColumns: '1fr 1fr',
-              // gridTemplateAreas: 'A1 A2'
+              gridTemplateRows: 'repeat(4, 65px)',
+              gridTemplateColumns: `${minimized_navdrawer_width} 1fr`,
+              alignItems: 'center',
+              minWidth: minimized_navdrawer_width,
             }}
           >
             {navdrawer_items.map((navdrawer_item, idx) => {
               return (
                 <React.Fragment key={idx}>
-                  <svg
-                    className={css.navdrawer_item}
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='16'
-                    height='16'
-                    fill='currentColor'
-                    viewBox='0 0 16 16'
+                  <div
+                    style={{
+                      // background: 'rgba(255, 0, 0, 0.25)',
+                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
                   >
-                    {navdrawer_item.svg_path}
-                  </svg>
+                    <svg
+                      className={css.navdrawer_item}
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='26'
+                      height='26'
+                      fill='currentColor'
+                      viewBox='0 0 16 16'
+                    >
+                      {navdrawer_item.svg_path}
+                    </svg>
+                  </div>
                   <span
                     ref={(el) => (navdrawer_items_text_refs.current[idx] = el)}
                     className={css.navdrawer_item}
