@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 
 import { elementGeometry } from '../../helpers/geometry';
 
+import css from './layout.module.scss';
+
 // ==============================================
 
 const navbar_height = '90px';
@@ -24,7 +26,7 @@ export default function Layout({ children }) {
     return () => setMounted(false);
   }, []);
 
-  const [navdrawer_open, setNavDrawerOpen] = useState(false);
+  const [navdrawer_open, setNavDrawerOpen] = useState(true);
   const navdrawer_ref = useRef();
   const navdrawer_svg_max_ref = useRef();
   const navdrawer_svg_min_ref = useRef();
@@ -43,10 +45,23 @@ export default function Layout({ children }) {
     if (navdrawer_open) {
       tl_ref.current = gsap
         .timeline()
-        .to(navdrawer_ref.current, {
-          duration: 0.5,
-          width: minimized_navdrawer_width,
+        .to(navdrawer_items_text_refs.current, {
+          duration: 0.3,
+          opacity: 0,
+          // onComplete: () => {
+          //   navdrawer_items_text_refs.current.forEach((elem) => {
+          //     elem.style.display = 'none';
+          //   });
+          // },
         })
+        .to(
+          navdrawer_ref.current,
+          {
+            duration: 0.5,
+            width: minimized_navdrawer_width,
+          },
+          '<'
+        )
         .to(
           main_content_ref.current,
           {
@@ -72,21 +87,11 @@ export default function Layout({ children }) {
             opacity: 1,
           },
           '<'
-        )
-        .to(navdrawer_items_text_refs.current, {
-          duration: 2,
-          opacity: 0,
-          onComplete: () => {
-            navdrawer_items_text_refs.current.forEach((elem) => {
-              elem.style.display = 'none';
-            });
-          },
-        });
+        );
     } else {
-      navdrawer_items_text_refs.current.forEach((elem) => {
-        elem.style.display = 'inline';
-      });
-      // navdrawer_items_text_refs.current[0].style.display = 'inline';
+      // navdrawer_items_text_refs.current.forEach((elem) => {
+      //   elem.style.display = 'inline';
+      // });
       tl_ref.current?.reverse();
     }
 
@@ -171,7 +176,7 @@ export default function Layout({ children }) {
               paddingLeft: 0,
             }}
           >
-            <li>
+            <li className={css.nav_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -185,7 +190,7 @@ export default function Layout({ children }) {
                 Users
               </span>
             </li>
-            <li>
+            <li className={css.nav_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -199,7 +204,7 @@ export default function Layout({ children }) {
                 Orders
               </span>
             </li>
-            <li>
+            <li className={css.nav_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -214,7 +219,7 @@ export default function Layout({ children }) {
               </span>
             </li>
 
-            <li>
+            <li className={css.nav_item}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
