@@ -223,11 +223,11 @@ export default function Layout({ children }) {
 
       <nav
         id='main-navbar'
+        className={css.main_navbar}
         style={{
           position: 'fixed',
           height: navbar_height,
           width: '100%',
-          background: 'blue',
         }}
       ></nav>
 
@@ -241,8 +241,8 @@ export default function Layout({ children }) {
           height: `calc(100vh - ${navbar_height})`,
           width: `calc(100% - ${navdrawer_width})`,
           overflowY: 'scroll',
-          // paddingLeft: navdrawer_width,
           border: 'solid hotpink 5px',
+          background: 'red',
         }}
       >
         {children}
