@@ -1,0 +1,46 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+pre {
+  font-size: 7em;
+}
+.marks .land {
+  fill: #ececec;
+}
+.marks .sphere {
+  fill: #fbfbfb;
+}
+.marks .interiors {
+  fill: none;
+  stroke: #d9dfe0;
+}
+.marks .graticules,
+.tick line {
+  fill: none;
+  stroke: #ececec;
+}
+circle {
+  fill: #137b80;
+  opacity: 0.3;
+}
+
+.tick text {
+  fill: #635f5d;
+  font-size: 0.5em;
+}
+.mark {
+  fill: #137b80;
+}
+.axis-label {
+  font-size: 0.5em;
+  fill: #635f5d;
+}
