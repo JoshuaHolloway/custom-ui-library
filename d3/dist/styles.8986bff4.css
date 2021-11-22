@@ -1,0 +1,62 @@
+:root {
+  --clr-neon: hsla(265 87% 67% / 0.6);
+  --clr-bg: hsl(265, 87%, 67%);
+
+  --clr-bg-2: hsl(153, 100%, 65%);
+  --clr-bg-3: hsl(19, 93%, 63%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+pre {
+  font-size: 7em;
+}
+.tick line {
+  stroke: #c0c0bb;
+}
+.tick text {
+  fill: #635f5d;
+}
+.marks circle {
+  fill: #137b80;
+}
+.marks path {
+  stroke: #9f64f4;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+
+  /* https://css-tricks.com/adding-shadows-to-svg-icons-with-css-and-svg-filters/ */
+  /* filter: drop-shadow(-13px 5px 2px rgb(0 0 0 / 0.4))
+    drop-shadow(13px 5px 2px rgb(255 0 0 / 0.4)); */
+  /* https://www.w3schools.com/graphics/svg_feoffset.asp */
+
+  /* filter: drop-shadow(0px 0px 0.5em var(--clr-neon)); */
+  filter: drop-shadow(2px 10px 0.4em var(--clr-neon))
+    drop-shadow(2px 12px 1.4em var(--clr-neon));
+  /* drop-shadow(offset-x   offset-y   blur-radius                   color) */
+
+  /* box-shadow: offset-x | offset-y | blur-radius | spread-radius | color */
+
+  /* The drop-shadow() function accepts a parameter of type <shadow> 
+     (defined in the box-shadow property), 
+     with the exception that the inset keyword 
+     and spread parameters are not allowed.
+  */
+}
+.axis-label {
+  font-size: 2.5em;
+  fill: #635f5d;
+}
+
+
+/*# sourceMappingURL=/styles.8986bff4.css.map */
