@@ -1,0 +1,53 @@
+.App {
+  text-align: center;
+  user-select: none;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 100vh;
+  color: white;
+}
+
+.App-overlay {
+  background-color: #282c34;
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  z-index: -1;
+}
+
+.App-bg {
+  background: red;
+  /* top: 0; */
+  /* left: 0; */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('./img/zoltan-tasi-eEMjPGfXAwg-unsplash.jpg');
+  background-position: center;
+  z-index: -2;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
