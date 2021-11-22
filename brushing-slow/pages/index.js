@@ -32,8 +32,6 @@ export default function Home() {
 
   const filteredData = brushExtent
     ? data.filter((d) => {
-        console.log('filteredData()');
-
         const date = xValue(d);
         return date > brushExtent[0] && date < brushExtent[1];
       })
