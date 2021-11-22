@@ -1,5 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { csv, scaleLinear, scaleTime, max, timeFormat, extent } from 'd3';
+
+import { useSpring, animated } from 'react-spring';
+import { useDrag } from 'react-use-gesture';
+
 import { useData } from '../helpers/useData';
 import { AxisBottom } from '../components/AxisBottom';
 import { AxisLeft } from '../components/AxisLeft';
@@ -13,8 +17,40 @@ const yAxisLabelOffset = 45;
 
 import css from '../styles/Home.module.css';
 
+// ==============================================
+
 export default function Home() {
   const data = useData();
+
+  // --------------------------------------------
+
+  const slider_pos = useSpring({ x: 0 });
+
+  const bindSliderPos = useDrag((params) => {
+    // setLogoPos({
+    //   x: params.offset[0],
+    //   y: params.offset[1],
+    // });
+
+    slider_pos.x.set(params.offset[0]);
+
+    // const y = params.xy[1];
+    // if (params.dragging) {
+    //   if (y >= 0 && y < SCREEN_HEIGHT) {
+    //     logoPos.y.set(params.offset[1]);
+    //   }
+    // } else {
+    //   if (y > SCREEN_HEIGHT / 2) {
+    //     // logoPos.y.set(y);
+    //     logoPos.y.start(y); // snap
+    //   } else {
+    //     // top half
+    //     // logoPos.y.set(0);
+    //     logoPos.y.start(0); // snap
+    //   }
+    // }
+  });
+  // --------------------------------------------
 
   if (!data) {
     return <pre>Loading...</pre>;
@@ -41,6 +77,7 @@ export default function Home() {
     .range([innerHeight, 0])
     .nice();
 
+  // --------------------------------------------
   return (
     <div
       className='container'
@@ -93,20 +130,26 @@ export default function Home() {
           />
         </g>
       </svg>
-
-      <div
-        style={{
-          position: 'absolute',
-          left: '370px',
-          height: '100%',
-          width: '100px',
-          background: 'rgba(255,255,255, 0.2)',
-          backdropFilter: 'blur(4px)',
-          border: 'solid 2px transparent',
-          backgroundClip: 'padding-box',
-          boxShadow: '10px 10px 10px  rgba(46, 54, 68, 0.03)',
-        }}
-      ></div>
+      <animated.div {...bindSliderPos()} style={{ x: slider_pos.x }}>
+        <div
+          style={{
+            position: 'absolute',
+            left: '370px',
+            height: '480px',
+            width: '100px',
+            background: 'rgba(255,255,255, 0.2)',
+            backdropFilter: 'blur(4px)',
+            filter: 'blur(2px)',
+            border: 'solid 2px rgba(0,0,0, 0.05)',
+            backgroundClip: 'padding-box',
+            boxShadow: '10px 10px 10px  rgba(46, 54, 68, 0.03)',
+          }}
+        />
+      </animated.div>
     </div>
   );
+
+  // --------------------------------------------
 }
+
+// ==============================================
