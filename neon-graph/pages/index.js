@@ -42,42 +42,71 @@ export default function Home() {
     .nice();
 
   return (
-    <svg width={width} height={height}>
-      <g transform={`translate(${margin.left},${margin.top})`}>
-        <AxisBottom
-          xScale={xScale}
-          innerHeight={innerHeight}
-          tickFormat={xAxisTickFormat}
-          tickOffset={7}
-        />
-        <text
-          className='axis-label'
-          textAnchor='middle'
-          transform={`translate(${-yAxisLabelOffset},${
-            innerHeight / 2
-          }) rotate(-90)`}
-        >
-          {yAxisLabel}
-        </text>
-        <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={7} />
-        <text
-          className='axis-label'
-          x={innerWidth / 2}
-          y={innerHeight + xAxisLabelOffset}
-          textAnchor='middle'
-        >
-          {xAxisLabel}
-        </text>
-        <Marks
-          data={data}
-          xScale={xScale}
-          yScale={yScale}
-          xValue={xValue}
-          yValue={yValue}
-          tooltipFormat={xAxisTickFormat}
-          circleRadius={3}
-        />
-      </g>
-    </svg>
+    <div
+      className='container'
+      style={{
+        position: 'relative',
+        height: '100vh',
+        width: '100vw',
+        border: 'solid hotpink 2px',
+      }}
+    >
+      <svg
+        width={width}
+        height={height}
+        style={{ position: 'absolute', top: '50', left: '50' }}
+      >
+        {/* <g transform={`translate(${margin.left},${margin.top})`}> */}
+        <g>
+          <AxisBottom
+            xScale={xScale}
+            innerHeight={innerHeight}
+            tickFormat={xAxisTickFormat}
+            tickOffset={7}
+          />
+          <text
+            className='axis-label'
+            textAnchor='middle'
+            transform={`translate(${-yAxisLabelOffset},${
+              innerHeight / 2
+            }) rotate(-90)`}
+          >
+            {yAxisLabel}
+          </text>
+          <AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={7} />
+          <text
+            className='axis-label'
+            x={innerWidth / 2}
+            y={innerHeight + xAxisLabelOffset}
+            textAnchor='middle'
+          >
+            {xAxisLabel}
+          </text>
+          <Marks
+            data={data}
+            xScale={xScale}
+            yScale={yScale}
+            xValue={xValue}
+            yValue={yValue}
+            tooltipFormat={xAxisTickFormat}
+            circleRadius={3}
+          />
+        </g>
+      </svg>
+
+      <div
+        style={{
+          position: 'absolute',
+          left: '370px',
+          height: '100%',
+          width: '100px',
+          background: 'rgba(255,255,255, 0.2)',
+          backdropFilter: 'blur(4px)',
+          border: 'solid 2px transparent',
+          backgroundClip: 'padding-box',
+          boxShadow: '10px 10px 10px  rgba(46, 54, 68, 0.03)',
+        }}
+      ></div>
+    </div>
   );
 }
