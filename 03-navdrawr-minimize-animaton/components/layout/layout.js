@@ -28,8 +28,7 @@ export default function Layout({ children }) {
 
   const [navdrawer_open, setNavDrawerOpen] = useState(true);
   const navdrawer_ref = useRef();
-  const navdrawer_svg_max_ref = useRef();
-  const navdrawer_svg_min_ref = useRef();
+  const navdrawer_svg_minimize_ref = useRef();
   const main_content_ref = useRef();
   const navdrawer_items_text_refs = useRef([]);
   const tl_ref = useRef();
@@ -48,11 +47,6 @@ export default function Layout({ children }) {
         .to(navdrawer_items_text_refs.current, {
           duration: 0.3,
           opacity: 0,
-          // onComplete: () => {
-          //   navdrawer_items_text_refs.current.forEach((elem) => {
-          //     elem.style.display = 'none';
-          //   });
-          // },
         })
         .to(
           navdrawer_ref.current,
@@ -75,24 +69,14 @@ export default function Layout({ children }) {
           '<'
         )
         .to(
-          navdrawer_svg_min_ref.current,
+          navdrawer_svg_minimize_ref.current,
           {
             duration: 0.5,
             rotate: 180,
           },
           '<'
         );
-      // .to(
-      //   navdrawer_svg_max_ref.current,
-      //   {
-      //     opacity: 1,
-      //   },
-      //   '<'
-      // );
     } else {
-      // navdrawer_items_text_refs.current.forEach((elem) => {
-      //   elem.style.display = 'inline';
-      // });
       tl_ref.current?.reverse();
     }
 
@@ -144,11 +128,11 @@ export default function Layout({ children }) {
       >
         <div
           id='navdrawer-minimize-button'
-          className={css.navdrawer_minmax_button}
+          className={css.navdrawer_minimize_button}
           onClick={navDrawerHandler}
         >
           <svg
-            ref={navdrawer_svg_min_ref}
+            ref={navdrawer_svg_minimize_ref}
             xmlns='http://www.w3.org/2000/svg'
             width='16'
             height='16'
