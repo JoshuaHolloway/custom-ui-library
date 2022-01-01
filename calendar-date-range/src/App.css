@@ -4,6 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  color: white;
 }
 
 :root {
@@ -13,6 +14,7 @@
   --box-height: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
   --rows: 3;
   --cols: 3;
+  --border-color: red;
 }
 
 .app {
@@ -50,26 +52,27 @@
   /* background: white !important; */
 }
 .on-start {
-  border: solid yellow 2px;
+  border: solid var(--border-color) 2px;
   border-right: none;
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
 }
 .on-end {
-  border: solid yellow 2px;
+  border: solid var(--border-color) 2px;
   border-left: none;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
 }
 .on-middle {
-  /* border: solid yellow 2px; */
-  /* border-left: none; */
-  /* border-top-right-radius: 50%; */
-  /* border-bottom-right-radius: 50%; */
-  border-top: solid yellow 2px;
-  border-bottom: solid yellow 2px;
+  border-top: solid var(--border-color) 2px;
+  border-bottom: solid var(--border-color) 2px;
+}
+
+.on-start-and-end {
+  border: solid var(--border-color) 2px;
+  border-radius: 50%;
 }
 
 .off {
-  background: black !important;
+  /* background: red !important; */
 }

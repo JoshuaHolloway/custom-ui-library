@@ -15,36 +15,23 @@ export default function App() {
   const [jdx_state_1, setJdxState1] = useState();
 
   const start_or_end = (idx, jdx) => {
-    if (idx === idx_state_0 && jdx === jdx_state_0) return 'start';
-    else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0)
+    if (
+      idx === idx_state_0 &&
+      jdx === jdx_state_0 &&
+      idx === idx_state_1 &&
+      jdx === jdx_state_1 &&
+      click_num === 0
+    ) {
+      // -Case 3: Date range is single day
+      return 'start-and-end';
+    } else if (idx === idx_state_0 && jdx === jdx_state_0) {
+      // -Case 1: Start of date range
+      return 'start';
+    } else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0) {
+      // -Case 2: End of date range
       return 'end';
+    }
   };
-
-  useEffect(() => {
-    console.clear();
-    console.log(
-      'click_num: ',
-      click_num,
-      '\tstate_0: (',
-      idx_state_0,
-      ', ',
-      jdx_state_0,
-      ')\tstate_1: (',
-      idx_state_1,
-      ', ',
-      jdx_state_1,
-      ')'
-    );
-  }, [idx_state_0, idx_state_0, jdx_state_1, jdx_state_1]);
-
-  // --------------------------------------------
-
-  // Strategy:
-  //  -Step 1: Record where the two clicks are at
-  //  -Step 2: Determine if click_num is 1st or second click
-  //    --If 1st click, then set 1st idx,jdx state values
-  //    --If 2nd click, then set 2nd idx,jdx state values
-  //  -Step 3:
 
   // --------------------------------------------
 
@@ -67,6 +54,7 @@ export default function App() {
       <div className='col' onClick={clickHandler(idx, jdx)}>
         {start_or_end(idx, jdx) === 'start' ? 'start' : null}
         {start_or_end(idx, jdx) === 'end' ? 'end' : null}
+        {start_or_end(idx, jdx) === 'start-and-end' ? 'start and end' : null}
       </div>
     );
 
@@ -96,7 +84,7 @@ export default function App() {
   const CalendarLayer1 = () => {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
-      let on_or_off = false;
+      let on_or_off = false; // true -> on, false -> off
       if (click_num === 0) {
         if (idx_state_0 === idx_state_1) {
           // -Case 1: same row
@@ -136,16 +124,19 @@ export default function App() {
         on_or_off = false;
       }
 
-      let classes = 'col';
+      let classes = 'col-layer1';
       if (start_or_end(idx, jdx) === 'start') {
         // left of starting click (round on left side)
         classes = 'col on on-start';
       } else if (start_or_end(idx, jdx) === 'end') {
         classes = 'col on on-end';
+      } else if (start_or_end(idx, jdx) === 'start-and-end') {
+        classes = `col on-start-and-end`;
+        console.log('start and end');
       } else if (on_or_off === true) {
         classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
       } else {
-        classes = `col`;
+        classes = `col off`;
       }
 
       // const on_or_off = false;
