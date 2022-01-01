@@ -1,0 +1,28 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.calendar-container {
+  background: red;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1px;
+  height: 1000px;
+  width: 1000px;
+}
+
+.calendar-container > .row {
+  background: blue;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+}
+
+.calendar-container > .row > .col {
+  background: rgba(0, 255, 255, 0.5);
+  /* height */
+}
