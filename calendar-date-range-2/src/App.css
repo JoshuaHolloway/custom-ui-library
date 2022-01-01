@@ -1,0 +1,78 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+:root {
+  --box-size: 50px;
+  --row-vertical-padding: 1px;
+  --box-width: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
+  --box-height: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
+  --rows: 7;
+  --cols: 7;
+  --border-color: red;
+}
+
+.app {
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100vh;
+}
+
+.calendar-container {
+  background: white;
+  display: grid;
+  grid-template-rows: repeat(var(--rows), var(--box-height));
+  gap: 1px;
+  padding: 2px;
+}
+
+.row {
+  background: white;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--box-width));
+  gap: 1px;
+  padding: var(--row-vertical-padding) 0;
+}
+
+.col {
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.on {
+  /* background: white !important; */
+}
+.on-start {
+  border: solid var(--border-color) 2px;
+  border-right: none;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+.on-end {
+  border: solid var(--border-color) 2px;
+  border-left: none;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+.on-middle {
+  border-top: solid var(--border-color) 2px;
+  border-bottom: solid var(--border-color) 2px;
+}
+
+.on-start-and-end {
+  border: solid var(--border-color) 2px;
+  border-radius: 50%;
+}
+
+.off {
+  /* background: red !important; */
+}
