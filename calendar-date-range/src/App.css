@@ -62,6 +62,14 @@
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
 }
+.on-middle {
+  /* border: solid yellow 2px; */
+  /* border-left: none; */
+  /* border-top-right-radius: 50%; */
+  /* border-bottom-right-radius: 50%; */
+  border-top: solid yellow 2px;
+  border-bottom: solid yellow 2px;
+}
 
 .off {
   background: black !important;

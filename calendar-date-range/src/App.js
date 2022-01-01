@@ -142,9 +142,12 @@ export default function App() {
         classes = 'col on on-start';
       } else if (start_or_end(idx, jdx) === 'end') {
         classes = 'col on on-end';
+      } else if (on_or_off === true) {
+        classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
       } else {
-        classes = `col ${on_or_off ? 'on' : 'off'}`;
+        classes = `col`;
       }
+
       // const on_or_off = false;
       return <div className={classes}>{children}</div>;
     };
