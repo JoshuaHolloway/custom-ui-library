@@ -92,13 +92,35 @@ export default function App() {
   const CalendarLayer1 = () => {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
-      const on_or_off =
-        idx_state_0 <= idx &&
-        idx <= idx_state_1 &&
-        jdx_state_0 <= jdx &&
-        jdx <= jdx_state_1;
+      let on_or_off = false;
+      let classes = 'col';
+
+      if (click_num === 0) {
+        if (idx_state_0 === idx_state_1) {
+          // -Case 1: same row
+          on_or_off =
+            idx_state_0 <= idx &&
+            idx <= idx_state_1 &&
+            jdx_state_0 <= jdx &&
+            jdx <= jdx_state_1;
+        } else if (Math.abs(idx_state_0 - idx_state_1) === 1) {
+          // Case 2: adjacent rows
+          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
+            // -Starting row
+            // -turn on row from first click to end of row
+            on_or_off = true;
+          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
+            // -Ending row
+            // -turn of row from starting of row to second click
+            on_or_off = true;
+          }
+        }
+      } else {
+        on_or_off = false;
+      }
+      classes = `col ${on_or_off ? 'on' : 'off'}`;
+
       // const on_or_off = false;
-      const classes = `col ${on_or_off ? 'on' : 'off'}`;
       return <div className={classes}>{children}</div>;
     };
 
