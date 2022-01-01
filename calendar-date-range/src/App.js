@@ -56,9 +56,12 @@ export default function App() {
     };
 
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
-    const Col = ({ idx, jdx, children }) => (
+    const Col = ({ idx, jdx }) => (
       <div className='col' onClick={clickHandler(idx, jdx)}>
-        {children}
+        {idx === idx_state_0 && jdx === jdx_state_0 ? 'start' : null}
+        {idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0
+          ? 'end'
+          : null}
       </div>
     );
 
