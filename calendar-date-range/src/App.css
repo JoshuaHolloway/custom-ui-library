@@ -24,7 +24,7 @@
 }
 
 .calendar-container {
-  background: gray;
+  background: white;
   display: grid;
   grid-template-rows: repeat(var(--rows), var(--box-height));
   gap: 1px;
@@ -32,7 +32,7 @@
 }
 
 .row {
-  background: gray;
+  background: white;
   display: grid;
   grid-template-columns: repeat(var(--cols), var(--box-width));
   gap: 1px;
@@ -40,14 +40,14 @@
 }
 
 .col {
-  background: rgba(0, 255, 255, 0.5);
+  background: black;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .on {
-  background: white !important;
+  /* background: white !important; */
 }
 .on-start {
   border: solid yellow 2px;
