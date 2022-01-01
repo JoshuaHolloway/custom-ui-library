@@ -49,11 +49,18 @@
 
 .on {
   background: white !important;
-  border: solid yellow 2px;
 }
 .on-start {
+  border: solid yellow 2px;
+  border-right: none;
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
+}
+.on-end {
+  border: solid yellow 2px;
+  border-left: none;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
 }
 
 .off {

@@ -140,6 +140,8 @@ export default function App() {
       if (start_or_end(idx, jdx) === 'start') {
         // left of starting click (round on left side)
         classes = 'col on on-start';
+      } else if (start_or_end(idx, jdx) === 'end') {
+        classes = 'col on on-end';
       } else {
         classes = `col ${on_or_off ? 'on' : 'off'}`;
       }
