@@ -15,25 +15,58 @@ export default function App() {
   //  -Step 2:
   //  -Step 3:
 
-  const Row = ({ idx, children }) => <div className='row'>{children}</div>;
-  const Col = ({ idx, jdx, children }) => (
-    <div className='col' onClick={clickHandler(idx, jdx)}>
-      {children}
-    </div>
-  );
+  // --------------------------------------------
+
+  const CalendarLayer1 = () => {
+    const Row = ({ idx, children }) => <div className='row'>{children}</div>;
+    const Col = ({ idx, jdx, children }) => (
+      <div className='col' onClick={clickHandler(idx, jdx)}>
+        {children}
+      </div>
+    );
+
+    return (
+      <div className='calendar-container'>
+        <Row idx={0}>
+          <Col idx={0} jdx={0} />
+          <Col idx={0} jdx={1} />
+        </Row>
+        <Row idx={1}>
+          <Col idx={1} jdx={0} />
+          <Col idx={1} jdx={1} />
+        </Row>
+      </div>
+    );
+  };
+
+  // --------------------------------------------
+
+  const CalendarLayer2 = () => {
+    const Row = ({ idx, children }) => <div className='row'>{children}</div>;
+    const Col = ({ idx, jdx, children }) => (
+      <div className='col'>{children}</div>
+    );
+
+    return (
+      <div className='calendar-container'>
+        <Row idx={0}>
+          <Col idx={0} jdx={0} />
+          <Col idx={0} jdx={1} />
+        </Row>
+        <Row idx={1}>
+          <Col idx={1} jdx={0} />
+          <Col idx={1} jdx={1} />
+        </Row>
+      </div>
+    );
+  };
 
   // --------------------------------------------
 
   return (
-    <div className='calendar-container'>
-      <Row idx={0}>
-        <Col idx={0} jdx={0} />
-        <Col idx={0} jdx={1} />
-      </Row>
-      <Row idx={1}>
-        <Col idx={1} jdx={0} />
-        <Col idx={1} jdx={1} />
-      </Row>
+    <div className='app'>
+      <CalendarLayer1 />
+      <CalendarLayer2 />
     </div>
   );
 
