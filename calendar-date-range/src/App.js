@@ -14,6 +14,12 @@ export default function App() {
   const [idx_state_1, setIdxState1] = useState();
   const [jdx_state_1, setJdxState1] = useState();
 
+  const start_or_end = (idx, jdx) => {
+    if (idx === idx_state_0 && jdx === jdx_state_0) return 'start';
+    else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0)
+      return 'end';
+  };
+
   useEffect(() => {
     console.clear();
     console.log(
@@ -59,10 +65,8 @@ export default function App() {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx }) => (
       <div className='col' onClick={clickHandler(idx, jdx)}>
-        {idx === idx_state_0 && jdx === jdx_state_0 ? 'start' : null}
-        {idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0
-          ? 'end'
-          : null}
+        {start_or_end(idx, jdx) === 'start' ? 'start' : null}
+        {start_or_end(idx, jdx) === 'end' ? 'end' : null}
       </div>
     );
 
@@ -93,8 +97,6 @@ export default function App() {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
       let on_or_off = false;
-      let classes = 'col';
-
       if (click_num === 0) {
         if (idx_state_0 === idx_state_1) {
           // -Case 1: same row
@@ -133,8 +135,14 @@ export default function App() {
       } else {
         on_or_off = false;
       }
-      classes = `col ${on_or_off ? 'on' : 'off'}`;
 
+      let classes = 'col';
+      if (start_or_end(idx, jdx) === 'start') {
+        // left of starting click (round on left side)
+        classes = 'col on on-start';
+      } else {
+        classes = `col ${on_or_off ? 'on' : 'off'}`;
+      }
       // const on_or_off = false;
       return <div className={classes}>{children}</div>;
     };
