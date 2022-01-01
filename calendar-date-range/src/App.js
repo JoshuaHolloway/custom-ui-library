@@ -15,6 +15,7 @@ export default function App() {
   const [jdx_state_1, setJdxState1] = useState();
 
   useEffect(() => {
+    console.clear();
     console.log(
       'click_num: ',
       click_num,
@@ -70,10 +71,17 @@ export default function App() {
         <Row idx={0}>
           <Col idx={0} jdx={0} />
           <Col idx={0} jdx={1} />
+          <Col idx={0} jdx={2} />
         </Row>
         <Row idx={1}>
           <Col idx={1} jdx={0} />
           <Col idx={1} jdx={1} />
+          <Col idx={1} jdx={2} />
+        </Row>
+        <Row idx={2}>
+          <Col idx={2} jdx={0} />
+          <Col idx={2} jdx={1} />
+          <Col idx={2} jdx={2} />
         </Row>
       </div>
     );
@@ -99,10 +107,17 @@ export default function App() {
         <Row idx={0}>
           <Col idx={0} jdx={0} />
           <Col idx={0} jdx={1} />
+          <Col idx={0} jdx={2} />
         </Row>
         <Row idx={1}>
           <Col idx={1} jdx={0} />
           <Col idx={1} jdx={1} />
+          <Col idx={1} jdx={2} />
+        </Row>
+        <Row idx={2}>
+          <Col idx={2} jdx={0} />
+          <Col idx={2} jdx={1} />
+          <Col idx={2} jdx={2} />
         </Row>
       </div>
     );

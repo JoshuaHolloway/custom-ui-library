@@ -11,29 +11,30 @@
   --calendar-height: 400px;
   /* --box-width: 200px; */
   /* --box-height: 200px; */
-  --rows: 2;
-  --cols: 2;
+  --rows: 3;
+  --cols: 3;
 }
 
 .app {
+  background: black;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   height: 100vh;
-  background: yellow;
 }
 
 .calendar-container {
-  background: red;
+  background: gray;
   display: grid;
   grid-template-rows: repeat(var(--rows), 1fr);
   gap: 1px;
   height: var(--calendar-height);
   width: var(--calendar-width);
+  padding: 2px;
 }
 
 .calendar-container > .row {
-  background: blue;
+  background: gray;
   display: grid;
   grid-template-columns: repeat(var(--cols), 1fr);
   gap: 1px;
@@ -47,8 +48,8 @@
 }
 
 .on {
-  background: red !important;
+  background: white !important;
 }
 .off {
-  background: green !important;
+  background: black !important;
 }
