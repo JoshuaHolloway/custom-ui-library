@@ -7,10 +7,10 @@
 }
 
 :root {
-  --calendar-width: 400px;
-  --calendar-height: 400px;
-  /* --box-width: 200px; */
-  /* --box-height: 200px; */
+  --box-size: 200px;
+  --row-vertical-padding: 2px;
+  --box-width: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
+  --box-height: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
   --rows: 3;
   --cols: 3;
 }
@@ -26,21 +26,20 @@
 .calendar-container {
   background: gray;
   display: grid;
-  grid-template-rows: repeat(var(--rows), 1fr);
+  grid-template-rows: repeat(var(--rows), var(--box-height));
   gap: 1px;
-  height: var(--calendar-height);
-  width: var(--calendar-width);
   padding: 2px;
 }
 
-.calendar-container > .row {
+.row {
   background: gray;
   display: grid;
-  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-columns: repeat(var(--cols), var(--box-width));
   gap: 1px;
+  padding: var(--row-vertical-padding) 0;
 }
 
-.calendar-container > .row > .col {
+.col {
   background: rgba(0, 255, 255, 0.5);
   display: flex;
   justify-content: center;
