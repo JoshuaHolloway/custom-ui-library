@@ -114,6 +114,21 @@ export default function App() {
             // -turn of row from starting of row to second click
             on_or_off = true;
           }
+        } else {
+          // Case 3: start row and end row are more than one row appart
+          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
+            // -Starting row
+            // -turn on row from first click to end of row
+            on_or_off = true;
+          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
+            // -Ending row
+            // -turn of row from starting of row to second click
+            on_or_off = true;
+          } else if (idx_state_0 < idx && idx < idx_state_1) {
+            // -Middle ros
+            // -turn on all middle row elements
+            on_or_off = true;
+          }
         }
       } else {
         on_or_off = false;
