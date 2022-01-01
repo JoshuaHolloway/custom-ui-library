@@ -42,3 +42,10 @@
 .calendar-container > .row > .col {
   background: rgba(0, 255, 255, 0.5);
 }
+
+.on {
+  background: red !important;
+}
+.off {
+  background: green !important;
+}
