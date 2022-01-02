@@ -158,9 +158,94 @@ export default function App() {
 
       const [hover, setHover] = useState(false);
 
+      let on_or_off = false; // true -> on, false -> off
+      if (click_num === 0 || !click_num) {
+        // -1st click and odd number clicks (click_num===null before first click)
+        if (idx_state_0 === idx_state_1) {
+          // -Case 1: same row
+          on_or_off =
+            idx_state_0 <= idx &&
+            idx <= idx_state_1 &&
+            jdx_state_0 <= jdx &&
+            jdx <= jdx_state_1;
+        } else if (Math.abs(idx_state_0 - idx_state_1) === 1) {
+          // Case 2: adjacent rows
+          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
+            // -Starting row
+            // -turn on row from first click to end of row
+            on_or_off = true;
+          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
+            // -Ending row
+            // -turn of row from starting of row to second click
+            on_or_off = true;
+          }
+        } else {
+          // Case 3: start row and end row are more than one row appart
+          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
+            // -Starting row
+            // -turn on row from first click to end of row
+            on_or_off = true;
+          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
+            // -Ending row
+            // -turn of row from starting of row to second click
+            on_or_off = true;
+          } else if (idx_state_0 < idx && idx < idx_state_1) {
+            // -Middle rows
+            // -turn on all middle row elements
+            on_or_off = true;
+          }
+        }
+      } else {
+        on_or_off = false;
+      }
+
+      // -Draw date range borders
+      let classes;
+      if (start_or_end(idx, jdx) === 'start') {
+        // left of starting click (round on left side)
+        classes = 'col on on-start';
+      } else if (start_or_end(idx, jdx) === 'end') {
+        classes = 'col on on-end';
+      } else if (start_or_end(idx, jdx) === 'start-and-end') {
+        classes = `col on-start-and-end`;
+        console.log('start and end');
+      } else if (on_or_off === true && click_num !== null) {
+        classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
+      } else {
+        classes = `col off`;
+      }
+
+      // if (lin_index === hover_index && is_valid && click_num !== 0) {
+      //   classes = `${classes} hover`;
+      // }
+
+      console.log(
+        'RUNNING CSS CODE, prev_ref: ',
+        prev_ref,
+        '\tcount: ',
+        count++
+      );
+
+      // if (
+      //   start_or_end(idx, jdx) === 'start' ||
+      //   start_or_end(idx, jdx) === 'start-and-end'
+      // ) {
+      //   // -point prev_ref to the end element
+      //   // -this allows us to easily change the css classes on this element
+      //   // -we use this when the hover for date-2' lin_index  < lin_index of date_1
+      //   //  --In this case we swap the css-class 'start' with 'end'
+      //   return (
+      //     <div ref={prev_ref} className={classes}>
+      //       {children}
+      //     </div>
+      //   );
+      // } else {
+      //   return <div className={classes}>{children}</div>;
+      // }
+
       return (
         <div
-          className={`col ${hover ? 'hover' : null}`}
+          className={`${classes} ${hover ? 'hover' : null}`}
           onClick={callback}
           onMouseEnter={() => {
             if (click_num === null) {
@@ -579,7 +664,7 @@ export default function App() {
     <div className='app'>
       <CalendarLayer0 />
       <div>
-        <h2>Click Num: {click_num ? click_num : 'null'}</h2>
+        <h2>Click Num: {click_num !== null ? click_num : 'null'}</h2>
         <h2>Year: {year}</h2>
         <h2>Month: {month}</h2>
         <h2>Days In Month: {days_in_month}</h2>
