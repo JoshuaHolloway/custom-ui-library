@@ -249,13 +249,11 @@ export default function App() {
 
     const Row = ({ children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx }) => {
-      const { d, lin_index, is_valid } = indices2day(idx, jdx);
+      const { d, is_valid } = indices2day(idx, jdx);
 
       const callback = is_valid ? clickHandler(idx, jdx) : () => {};
 
       const [hover, setHover] = useState(false);
-
-      const [classes, setClasses] = useState(getClasses(idx, jdx));
 
       // Region 0: date_0 < date_1 (hover)  -  Regular
       // Region 1: date_0 > date_1 (hover)  -  Backward
@@ -273,21 +271,20 @@ export default function App() {
               setHover(true);
             }
 
-            const { lin_index: lin } = indices2day(idx, jdx);
-            if (lin === date_range_0?.lin_index) {
+            const { lin_index } = indices2day(idx, jdx);
+            if (lin_index === date_range_0?.lin_index) {
               setRegionState(2);
-            } else if (date_range_0?.lin_index < lin) {
+            } else if (date_range_0?.lin_index < lin_index) {
               setRegionState(0);
-            } else if (lin < date_range_0?.lin_index) {
+            } else if (lin_index < date_range_0?.lin_index) {
               setRegionState(1);
             }
           }}
           onMouseLeave={() => {
-            // setHoverIndex(null);
             setHover(false);
           }}
           ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
-          className={`${classes} ${hover ? 'hover' : null}`}
+          className={`${getClasses(idx, jdx)} ${hover ? 'hover' : null}`}
         >
           {is_valid ? d : null}
         </div>
