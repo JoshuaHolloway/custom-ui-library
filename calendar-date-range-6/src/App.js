@@ -5,6 +5,8 @@ import { getMonthInfo } from './date';
 
 // ==============================================
 
+let count = 0;
+
 export default function App() {
   // --------------------------------------------
 
@@ -150,8 +152,8 @@ export default function App() {
 
     // - - - - - - - - - - - - - - - - - - - - -
 
-    const Row = ({ idx, children }) => <div className='row'>{children}</div>;
-    const Col = ({ idx, jdx, children }) => {
+    const Row = ({ children }) => <div className='row'>{children}</div>;
+    const Col = ({ idx, jdx }) => {
       const { d, lin_index, is_valid } = indices2day(idx, jdx);
 
       const callback = is_valid ? clickHandler(idx, jdx) : () => {};
@@ -215,33 +217,12 @@ export default function App() {
         classes = `col off`;
       }
 
-      // if (lin_index === hover_index && is_valid && click_num !== 0) {
-      //   classes = `${classes} hover`;
-      // }
-
       console.log(
         'RUNNING CSS CODE, prev_ref: ',
         prev_ref,
         '\tcount: ',
         count++
       );
-
-      // if (
-      //   start_or_end(idx, jdx) === 'start' ||
-      //   start_or_end(idx, jdx) === 'start-and-end'
-      // ) {
-      //   // -point prev_ref to the end element
-      //   // -this allows us to easily change the css classes on this element
-      //   // -we use this when the hover for date-2' lin_index  < lin_index of date_1
-      //   //  --In this case we swap the css-class 'start' with 'end'
-      //   return (
-      //     <div ref={prev_ref} className={classes}>
-      //       {children}
-      //     </div>
-      //   );
-      // } else {
-      //   return <div className={classes}>{children}</div>;
-      // }
 
       return (
         <div
@@ -273,8 +254,8 @@ export default function App() {
             // setHoverIndex(null);
             setHover(false);
           }}
+          ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
         >
-          {/* {children} */}
           {is_valid ? d : null}
         </div>
       );
@@ -488,178 +469,6 @@ export default function App() {
 
   // --------------------------------------------
 
-  let count = 0;
-
-  // -Layer 1: Graphical Output
-  const CalendarLayer1 = () => {
-    // - - - - - - - - - - - - - - - - - - - - -
-    const Row = ({ idx, children }) => <div className='row'>{children}</div>;
-    const Col = ({ idx, jdx, children }) => {
-      let on_or_off = false; // true -> on, false -> off
-      if (click_num === 0 || !click_num) {
-        // -1st click and odd number clicks (click_num===null before first click)
-        if (idx_state_0 === idx_state_1) {
-          // -Case 1: same row
-          on_or_off =
-            idx_state_0 <= idx &&
-            idx <= idx_state_1 &&
-            jdx_state_0 <= jdx &&
-            jdx <= jdx_state_1;
-        } else if (Math.abs(idx_state_0 - idx_state_1) === 1) {
-          // Case 2: adjacent rows
-          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
-            // -Starting row
-            // -turn on row from first click to end of row
-            on_or_off = true;
-          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
-            // -Ending row
-            // -turn of row from starting of row to second click
-            on_or_off = true;
-          }
-        } else {
-          // Case 3: start row and end row are more than one row appart
-          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
-            // -Starting row
-            // -turn on row from first click to end of row
-            on_or_off = true;
-          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
-            // -Ending row
-            // -turn of row from starting of row to second click
-            on_or_off = true;
-          } else if (idx_state_0 < idx && idx < idx_state_1) {
-            // -Middle rows
-            // -turn on all middle row elements
-            on_or_off = true;
-          }
-        }
-      } else {
-        on_or_off = false;
-      }
-
-      // const { lin_index, is_valid } = indices2day(idx, jdx);
-
-      // -This code should not run on hover
-
-      // -Draw date range borders
-      let classes;
-      if (start_or_end(idx, jdx) === 'start') {
-        // left of starting click (round on left side)
-        classes = 'col on on-start';
-      } else if (start_or_end(idx, jdx) === 'end') {
-        classes = 'col on on-end';
-      } else if (start_or_end(idx, jdx) === 'start-and-end') {
-        classes = `col on-start-and-end`;
-        console.log('start and end');
-      } else if (on_or_off === true && click_num !== null) {
-        classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
-      } else {
-        classes = `col off`;
-      }
-
-      // if (lin_index === hover_index && is_valid && click_num !== 0) {
-      //   classes = `${classes} hover`;
-      // }
-
-      console.log(
-        'RUNNING CSS CODE, prev_ref: ',
-        prev_ref,
-        '\tcount: ',
-        count++
-      );
-
-      if (
-        start_or_end(idx, jdx) === 'start' ||
-        start_or_end(idx, jdx) === 'start-and-end'
-      ) {
-        // -point prev_ref to the end element
-        // -this allows us to easily change the css classes on this element
-        // -we use this when the hover for date-2' lin_index  < lin_index of date_1
-        //  --In this case we swap the css-class 'start' with 'end'
-        return (
-          <div ref={prev_ref} className={classes}>
-            {children}
-          </div>
-        );
-      } else {
-        return <div className={classes}>{children}</div>;
-      }
-    };
-
-    // - - - - - - - - - - - - - - - - - - - - -
-
-    return (
-      <div className='calendar-container'>
-        <div
-          style={{
-            background: 'black',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        ></div>
-        <div style={{ background: 'darkorchid' }}></div>
-        <Row idx={0}>
-          <Col idx={0} jdx={0} />
-          <Col idx={0} jdx={1} />
-          <Col idx={0} jdx={2} />
-          <Col idx={0} jdx={3} />
-          <Col idx={0} jdx={4} />
-          <Col idx={0} jdx={5} />
-          <Col idx={0} jdx={6} />
-        </Row>
-        <Row idx={1}>
-          <Col idx={1} jdx={0} />
-          <Col idx={1} jdx={1} />
-          <Col idx={1} jdx={2} />
-          <Col idx={1} jdx={3} />
-          <Col idx={1} jdx={4} />
-          <Col idx={1} jdx={5} />
-          <Col idx={1} jdx={6} />
-        </Row>
-        <Row idx={2}>
-          <Col idx={2} jdx={0} />
-          <Col idx={2} jdx={1} />
-          <Col idx={2} jdx={2} />
-          <Col idx={2} jdx={3} />
-          <Col idx={2} jdx={4} />
-          <Col idx={2} jdx={5} />
-          <Col idx={2} jdx={6} />
-        </Row>
-        <Row idx={3}>
-          <Col idx={3} jdx={0} />
-          <Col idx={3} jdx={1} />
-          <Col idx={3} jdx={2} />
-          <Col idx={3} jdx={3} />
-          <Col idx={3} jdx={4} />
-          <Col idx={3} jdx={5} />
-          <Col idx={3} jdx={6} />
-        </Row>
-        <Row idx={4}>
-          <Col idx={4} jdx={0} />
-          <Col idx={4} jdx={1} />
-          <Col idx={4} jdx={2} />
-          <Col idx={4} jdx={3} />
-          <Col idx={4} jdx={4} />
-          <Col idx={4} jdx={5} />
-          <Col idx={4} jdx={6} />
-        </Row>
-        <Row idx={5}>
-          <Col idx={5} jdx={0} />
-          <Col idx={5} jdx={1} />
-          <Col idx={5} jdx={2} />
-          <Col idx={5} jdx={3} />
-          <Col idx={5} jdx={4} />
-          <Col idx={5} jdx={5} />
-          <Col idx={5} jdx={6} />
-        </Row>
-      </div>
-    );
-
-    // - - - - - - - - - - - - - - - - - - - - -
-  };
-
-  // --------------------------------------------
-
   return (
     <div className='app'>
       <CalendarLayer0 />
@@ -680,7 +489,6 @@ export default function App() {
         <h2>M: {date_range_1?.month}</h2>
         <h2>D: {date_range_1?.date}</h2>
       </div>
-      <CalendarLayer1 />
     </div>
   );
 
