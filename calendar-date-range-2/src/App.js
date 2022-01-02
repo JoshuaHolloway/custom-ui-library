@@ -175,29 +175,32 @@ export default function App() {
               />
             </svg>
 
-            <h2
+            <div
               style={{
                 position: 'absolute',
                 fontSize: '1.8em',
               }}
             >
-              {
-                [
-                  'Jan',
-                  'Feb',
-                  'Mar',
-                  'Apr',
-                  'May',
-                  'Jun',
-                  'Jul',
-                  'Aug',
-                  'Sep',
-                  'Oct',
-                  'Nov',
-                  'Dec',
-                ][month]
-              }
-            </h2>
+              <h2>
+                {
+                  [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec',
+                  ][month]
+                }{' '}
+                {year}
+              </h2>
+            </div>
 
             <svg
               width='52'
