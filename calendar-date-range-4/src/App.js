@@ -10,7 +10,7 @@ export default function App() {
 
   // --------------------------------------------
 
-  const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d}: {year: number, month: number, date: number}
+  const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d, idx, jdx}: {year: number, month: number, date: number, idx: number, jdx: number}
   const [date_range_1, setDateRange1] = useState();
 
   const [month, setMonth] = useState();
@@ -122,15 +122,31 @@ export default function App() {
 
         // -Click handlers are applied only to valid region.
         //  => We can just store the date without checking validity.
-        setDateRange0({ year, month, date: d });
+        setDateRange0({ year, month, date: d, idx, jdx });
       } else if (click_num === 1) {
         // -Second date-range click
-        setIdxState1(idx);
-        setJdxState1(jdx);
+        if (date_range_0.date <= d) {
+          // -standard case (date-1 <= date-2)
 
-        // -Click handlers are applied only to valid region.
-        //  => We can just store the date without checking validity.
-        setDateRange1({ year, month, date: d });
+          setIdxState1(idx);
+          setJdxState1(jdx);
+
+          // -Click handlers are applied only to valid region.
+          //  => We can just store the date without checking validity.
+          setDateRange1({ year, month, date: d, idx, jdx });
+        } else {
+          // -backward case (date-1 > date-2)
+
+          // -step 1: set click-2 state to click-1
+          setIdxState1(date_range_0.idx);
+          setJdxState1(date_range_0.jdx);
+          setDateRange1({ ...date_range_0 });
+
+          // -step 2: set date_range_0 to current values
+          setIdxState0(idx);
+          setJdxState0(jdx);
+          setDateRange0({ year, month, date: d, idx, jdx });
+        }
       }
       handleClickNum();
     };
@@ -414,7 +430,7 @@ export default function App() {
             // -turn of row from starting of row to second click
             on_or_off = true;
           } else if (idx_state_0 < idx && idx < idx_state_1) {
-            // -Middle ros
+            // -Middle rows
             // -turn on all middle row elements
             on_or_off = true;
           }
@@ -423,17 +439,48 @@ export default function App() {
         on_or_off = false;
       }
 
-      // const lin_index = idx * 7 + jdx;
-      // const d = lin_index - first_day + 1;
-
       const { d, lin_index } = indices2day(idx, jdx);
 
+      // -3-cases for date range:
+      //  --date-1 < date-2 (standard case)
+      //  --date-1 = date-2 (singe-day case)
+      //  --date-1 > date-2 (backward case)
+      //    => swap endpoints graphically (CSS classes 'on-start and 'on-end')
+      //    => swap date_range_0 with date_range_1
+
+      // -Draw date range borders
       let classes;
       if (start_or_end(idx, jdx) === 'start') {
         // left of starting click (round on left side)
         classes = 'col on on-start';
       } else if (start_or_end(idx, jdx) === 'end') {
-        classes = 'col on on-end';
+        // -test for date-1 > date-2 (backward case)
+        if (date_range_0.date < d) {
+          // -standard case (date-1 < date-2)
+          classes = 'col on on-end';
+        } else if (date_range_0.date > d) {
+          // -backward case (date-1 > date-2)
+
+          // -Step 1: set CSS on 2nd-clicked element to the draw as the start of date range (round on left)
+          classes = 'col on on-start';
+
+          // -Step 2: swap the date-range values in state
+          // const spreaded = { ...date_range_0 };
+          // setDateRange1({
+          //   year: date_range_0.year,
+          //   month: date_range_0.month,
+          //   date: date_range_0.date,
+          //   idx: date_range_0.idx,
+          //   jdx: date_range_0.jdx,
+          // }); // {year: y, month: m, date: d, idx, jdx}: {year: number, month: number, date: number, idx: number, jdx: number}
+          // setDateRange1(spreaded);
+          // setDateRange0({ year, month, date: d, idx, jdx });
+        }
+        // else {
+        //   throw new Error(
+        //     "date-1 === date-2 but we are in the body of the start_or_end(idx, jdx) === 'end' if-statement"
+        //   );
+        // }
       } else if (start_or_end(idx, jdx) === 'start-and-end') {
         classes = `col on-start-and-end`;
         console.log('start and end');
