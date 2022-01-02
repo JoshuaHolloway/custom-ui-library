@@ -31,6 +31,19 @@ export default function App() {
     setFirstDay(f_d);
   }, []);
 
+  useEffect(() => {
+    console.log(
+      'year: ',
+      year,
+      '\tnew_month: ',
+      month,
+      '\tdays_in_month: ',
+      days_in_month,
+      '\tfirst_day: ',
+      first_day
+    );
+  }, [month]);
+
   // --------------------------------------------
 
   const [click_num, setClickNum] = useState(0);
@@ -129,15 +142,35 @@ export default function App() {
               viewBox='0 0 16 16'
               onClick={() => {
                 if (0 <= month - 1) {
-                  setMonth((prev) => prev - 1);
+                  setMonth((prev) => {
+                    const new_month = prev - 1;
+
+                    const { days_in_month: d_in_m, first_day: f_d } =
+                      getMonthInfo(year, new_month);
+
+                    setDaysInMonth(d_in_m);
+                    setFirstDay(f_d);
+
+                    return new_month;
+                  });
                 } else {
-                  setMonth(11); // dec. previous year
-                  setYear((prev) => prev - 1);
+                  setYear((prev) => {
+                    const new_year = prev - 1;
+
+                    const { days_in_month: d_in_m, first_day: f_d } =
+                      getMonthInfo(new_year, 0);
+
+                    setDaysInMonth(d_in_m);
+                    setFirstDay(f_d);
+
+                    return new_year;
+                  });
+                  setMonth(11); // jan. following year
                 }
               }}
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'
               />
             </svg>
@@ -186,7 +219,6 @@ export default function App() {
                     return new_month;
                   });
                 } else {
-                  setMonth(0); // jan. following year
                   setYear((prev) => {
                     const new_year = prev + 1;
 
@@ -198,11 +230,12 @@ export default function App() {
 
                     return new_year;
                   });
+                  setMonth(0); // jan. following year
                 }
               }}
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
               />
             </svg>
@@ -409,7 +442,12 @@ export default function App() {
   return (
     <div className='app'>
       <CalendarLayer0 />
-      <h2>Click Num: {click_num}</h2>
+      <div>
+        <h2>Click Num: {click_num}</h2>
+        <h2>Year: {year}</h2>
+        <h2>Month: {month}</h2>
+        <h2>Days In Month: {days_in_month}</h2>
+      </div>
       <CalendarLayer1 />
     </div>
   );

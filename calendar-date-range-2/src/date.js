@@ -14,7 +14,7 @@ const getMonthInfo = (y, m) => {
     first_day
   ];
 
-  const days_in_month = new Date(y, m, 0).getDate();
+  const days_in_month = new Date(y, m + 1, 0).getDate();
 
   return { days_in_month, first_day, first_day_str };
 };
