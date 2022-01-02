@@ -14,14 +14,17 @@ export default function App() {
 
   useEffect(() => {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
+    const y = today.getFullYear();
+    const m = today.getMonth();
+
+    setMonth(m);
+    setYear(y);
 
     const {
       days_in_month: d_in_m,
       first_day: f_d,
       first_day_str,
-    } = getMonthInfo(year, month);
+    } = getMonthInfo(y, m);
     console.log('first_day: ', f_d);
 
     setDaysInMonth(d_in_m);
@@ -84,10 +87,13 @@ export default function App() {
       // -adjust by adding 1
       // -without the +1 the first day of the month is labeld as zero
 
+      const is_valid = 0 < d && d <= days_in_month;
+      const callback = is_valid ? clickHandler(idx, jdx) : () => {};
+
       return (
-        <div className='col' onClick={clickHandler(idx, jdx)}>
+        <div className='col' onClick={callback}>
           {/* {children} */}
-          {0 < d && d <= days_in_month ? d : null}
+          {is_valid ? d : null}
         </div>
       );
     };
@@ -96,6 +102,92 @@ export default function App() {
 
     return (
       <div className='calendar-container'>
+        <div
+          style={{
+            background: 'black',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              // border: 'solid hotpink 2px',
+              position: 'relative', // used to fix the month in the center so it does not move when the arrows are clicked
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}
+          >
+            <svg
+              width='52'
+              height='52'
+              fill='currentColor'
+              className='chevron-left'
+              viewBox='0 0 16 16'
+              onClick={() => {
+                if (0 <= month - 1) {
+                  setMonth((prev) => prev - 1);
+                } else {
+                  setMonth(11); // dec. previous year
+                  setYear((prev) => prev - 1);
+                }
+              }}
+            >
+              <path
+                fill-rule='evenodd'
+                d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'
+              />
+            </svg>
+
+            <h2
+              style={{
+                position: 'absolute',
+                fontSize: '1.8em',
+              }}
+            >
+              {
+                [
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul',
+                  'Aug',
+                  'Sep',
+                  'Oct',
+                  'Nov',
+                  'Dec',
+                ][month]
+              }
+            </h2>
+
+            <svg
+              width='52'
+              height='52'
+              fill='currentColor'
+              className='chevron-right'
+              viewBox='0 0 16 16'
+              onClick={() => {
+                if (month + 1 < 12) {
+                  setMonth((prev) => prev + 1);
+                } else {
+                  setMonth(0); // jan. following year
+                  setYear((prev) => prev + 1);
+                }
+              }}
+            >
+              <path
+                fill-rule='evenodd'
+                d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
+              />
+            </svg>
+          </div>
+        </div>
         <div className='row day-titles'>
           {days.map((day) => {
             return (
@@ -106,18 +198,9 @@ export default function App() {
           })}
         </div>
         <Row idx={0}>
-          {days.map((day, jdx) => {
-            // if (jdx >= first_day) {
-            //   return <Col key={day} idx={0} jdx={jdx} />;
-            // } else {
-            //   return null;
-            // }
-            return (
-              <Col key={day} idx={0} jdx={jdx}>
-                {/* {jdx >= first_day ? 7 - first_day : null} */}
-              </Col>
-            );
-          })}
+          {days.map((day, jdx) => (
+            <Col key={day} idx={0} jdx={jdx} />
+          ))}
         </Row>
         <Row idx={1}>
           <Col idx={1} jdx={0} />

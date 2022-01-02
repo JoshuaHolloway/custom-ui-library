@@ -12,7 +12,7 @@
   --row-vertical-padding: 1px;
   --box-width: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
   --box-height: calc(var(--box-size) + calc(2 * var(--row-vertical-padding)));
-  --rows: 7;
+  --rows: 8;
   --cols: 7;
   --border-color: red;
 }
