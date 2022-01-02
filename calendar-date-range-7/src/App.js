@@ -152,14 +152,8 @@ export default function App() {
 
     // - - - - - - - - - - - - - - - - - - - - -
 
-    const Row = ({ children }) => <div className='row'>{children}</div>;
-    const Col = ({ idx, jdx }) => {
-      const { d, lin_index, is_valid } = indices2day(idx, jdx);
-
-      const callback = is_valid ? clickHandler(idx, jdx) : () => {};
-
-      const [hover, setHover] = useState(false);
-
+    // -Draw date range borders
+    const getClasses = (idx, jdx) => {
       let on_or_off = false; // true -> on, false -> off
       if (click_num === 0 || !click_num) {
         // -1st click and odd number clicks (click_num===null before first click)
@@ -201,7 +195,6 @@ export default function App() {
         on_or_off = false;
       }
 
-      // -Draw date range borders
       let classes;
       if (start_or_end(idx, jdx) === 'start') {
         // left of starting click (round on left side)
@@ -216,17 +209,60 @@ export default function App() {
       } else {
         classes = `col off`;
       }
+      return classes;
+    };
 
-      console.log(
-        'RUNNING CSS CODE, prev_ref: ',
-        prev_ref,
-        '\tcount: ',
-        count++
-      );
+    // - - - - - - - - - - - - - - - - - - - - -
+
+    const [region_state, setRegionState] = useState();
+    useEffect(() => {
+      if (click_num === 1) {
+        // -Flip the start style with the end style
+        //  if the hover index is less than the
+        //  first date index:
+
+        if (region_state === 2) {
+          console.log('region 2');
+          // -Same day case (date_0 === date_1)
+          prev_ref.current.classList.remove('on-start');
+          prev_ref.current.classList.remove('on-end');
+          prev_ref.current.classList.add('on-start-and-end');
+        } else if (region_state === 0) {
+          console.log('region 0');
+          // -Standard case
+          // prev_ref.current.classList.replace('on-end', 'on-start');
+          prev_ref.current.classList.remove('on-start-and-end');
+          prev_ref.current.classList.remove('on-end');
+          prev_ref.current.classList.add('on-start');
+        } else if (region_state === 1) {
+          console.log('region 1');
+          // -Reverse case (date_0 > date_1)
+          // prev_ref.current.classList.replace('on-start', 'on-end');
+          prev_ref.current.classList.remove('on-start-and-end');
+          prev_ref.current.classList.remove('on-start');
+          prev_ref.current.classList.add('on-end');
+        }
+      }
+    }, [region_state]);
+
+    // - - - - - - - - - - - - - - - - - - - - -
+
+    const Row = ({ children }) => <div className='row'>{children}</div>;
+    const Col = ({ idx, jdx }) => {
+      const { d, lin_index, is_valid } = indices2day(idx, jdx);
+
+      const callback = is_valid ? clickHandler(idx, jdx) : () => {};
+
+      const [hover, setHover] = useState(false);
+
+      const [classes, setClasses] = useState(getClasses(idx, jdx));
+
+      // Region 0: date_0 < date_1 (hover)  -  Regular
+      // Region 1: date_0 > date_1 (hover)  -  Backward
+      // Region 2: date_0 = date_1 (hover)  -  Same day
 
       return (
         <div
-          className={`${classes} ${hover ? 'hover' : null}`}
           onClick={callback}
           onMouseEnter={() => {
             if (click_num !== 0 && is_valid) {
@@ -237,15 +273,13 @@ export default function App() {
               setHover(true);
             }
 
-            if (click_num === 1) {
-              // -Flip the start style with the end style
-              //  if the hover index is less than the
-              //  first date index:
-              if (lin_index < date_range_0.lin_index) {
-                prev_ref.current.classList.replace('on-start', 'on-end');
-              } else {
-                prev_ref.current.classList.replace('on-end', 'on-start');
-              }
+            const { lin_index: lin } = indices2day(idx, jdx);
+            if (lin === date_range_0?.lin_index) {
+              setRegionState(2);
+            } else if (date_range_0?.lin_index < lin) {
+              setRegionState(0);
+            } else if (lin < date_range_0?.lin_index) {
+              setRegionState(1);
             }
           }}
           onMouseLeave={() => {
@@ -253,6 +287,7 @@ export default function App() {
             setHover(false);
           }}
           ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
+          className={`${classes} ${hover ? 'hover' : null}`}
         >
           {is_valid ? d : null}
         </div>
@@ -480,6 +515,10 @@ export default function App() {
         <h2>Y: {date_range_0?.year}</h2>
         <h2>M: {date_range_0?.month}</h2>
         <h2>D: {date_range_0?.date}</h2>
+        <h3>
+          Lin Index:{' '}
+          {date_range_0 !== undefined ? date_range_0?.lin_index : 'null'}
+        </h3>
 
         <hr />
         <h3>Date Range Hi:</h3>
