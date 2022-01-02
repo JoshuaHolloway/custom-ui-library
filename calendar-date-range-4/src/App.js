@@ -8,6 +8,9 @@ export default function App() {
 
   // --------------------------------------------
 
+  const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d}: {year: number, month: number, date: number}
+  const [date_range_1, setDateRange1] = useState();
+
   const [month, setMonth] = useState();
   const [year, setYear] = useState();
 
@@ -93,20 +96,37 @@ export default function App() {
 
   // --------------------------------------------
 
+  // -Layer 0: Click input handling logic
   const CalendarLayer0 = () => {
+    // - - - - - - - - - - - - - - - - - - - - -
     const clickHandler = (idx, jdx) => (e) => {
       // console.log(`idx: ${idx}\tjdx: ${jdx}`);
 
+      const lin_index = idx * 7 + jdx;
+      const d = lin_index - first_day + 1;
+
       if (click_num === 0 || !click_num) {
+        // -1st date-range click
         // -1st click (click_num===null) and odd number clicks
         setIdxState0(idx);
         setJdxState0(jdx);
+
+        // -Click handlers are applied only to valid region.
+        //  => We can just store the date without checking validity.
+        setDateRange0({ year, month, date: d });
       } else if (click_num === 1) {
+        // -Second date-range click
         setIdxState1(idx);
         setJdxState1(jdx);
+
+        // -Click handlers are applied only to valid region.
+        //  => We can just store the date without checking validity.
+        setDateRange1({ year, month, date: d });
       }
       handleClickNum();
     };
+
+    // - - - - - - - - - - - - - - - - - - - - -
 
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
@@ -138,7 +158,11 @@ export default function App() {
       );
     };
 
+    // - - - - - - - - - - - - - - - - - - - - -
+
     let days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+    // - - - - - - - - - - - - - - - - - - - - -
 
     return (
       <div className='calendar-container'>
@@ -336,11 +360,15 @@ export default function App() {
         </Row>
       </div>
     );
+
+    // - - - - - - - - - - - - - - - - - - - - -
   };
 
   // --------------------------------------------
 
+  // -Layer 1: Graphical Output
   const CalendarLayer1 = () => {
+    // - - - - - - - - - - - - - - - - - - - - -
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
       let on_or_off = false; // true -> on, false -> off
@@ -411,6 +439,8 @@ export default function App() {
       return <div className={classes}>{children}</div>;
     };
 
+    // - - - - - - - - - - - - - - - - - - - - -
+
     return (
       <div className='calendar-container'>
         <div
@@ -478,6 +508,8 @@ export default function App() {
         </Row>
       </div>
     );
+
+    // - - - - - - - - - - - - - - - - - - - - -
   };
 
   // --------------------------------------------
@@ -486,10 +518,21 @@ export default function App() {
     <div className='app'>
       <CalendarLayer0 />
       <div>
-        <h2>Click Num: {click_num}</h2>
+        <h2>Click Num: {click_num ? click_num : 'null'}</h2>
         <h2>Year: {year}</h2>
         <h2>Month: {month}</h2>
         <h2>Days In Month: {days_in_month}</h2>
+        <hr />
+        <h3>Date Range Lo:</h3>
+        <h2>Y: {date_range_0?.year}</h2>
+        <h2>M: {date_range_0?.month}</h2>
+        <h2>D: {date_range_0?.date}</h2>
+
+        <hr />
+        <h3>Date Range Hi:</h3>
+        <h2>Y: {date_range_1?.year}</h2>
+        <h2>M: {date_range_1?.month}</h2>
+        <h2>D: {date_range_1?.date}</h2>
       </div>
       <CalendarLayer1 />
     </div>
