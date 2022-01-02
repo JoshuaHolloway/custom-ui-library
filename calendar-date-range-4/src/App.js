@@ -393,7 +393,7 @@ export default function App() {
       } else if (start_or_end(idx, jdx) === 'start-and-end') {
         classes = `col on-start-and-end`;
         console.log('start and end');
-      } else if (on_or_off === true) {
+      } else if (on_or_off === true && click_num !== null) {
         classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
       } else {
         classes = `col off`;
