@@ -174,10 +174,30 @@ export default function App() {
               viewBox='0 0 16 16'
               onClick={() => {
                 if (month + 1 < 12) {
-                  setMonth((prev) => prev + 1);
+                  setMonth((prev) => {
+                    const new_month = prev + 1;
+
+                    const { days_in_month: d_in_m, first_day: f_d } =
+                      getMonthInfo(year, new_month);
+
+                    setDaysInMonth(d_in_m);
+                    setFirstDay(f_d);
+
+                    return new_month;
+                  });
                 } else {
                   setMonth(0); // jan. following year
-                  setYear((prev) => prev + 1);
+                  setYear((prev) => {
+                    const new_year = prev + 1;
+
+                    const { days_in_month: d_in_m, first_day: f_d } =
+                      getMonthInfo(new_year, 0);
+
+                    setDaysInMonth(d_in_m);
+                    setFirstDay(f_d);
+
+                    return new_year;
+                  });
                 }
               }}
             >
@@ -317,6 +337,14 @@ export default function App() {
 
     return (
       <div className='calendar-container'>
+        <div
+          style={{
+            background: 'black',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        ></div>
         <div style={{ background: 'darkorchid' }}></div>
         <Row idx={0}>
           <Col idx={0} jdx={0} />
