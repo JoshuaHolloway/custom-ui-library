@@ -87,7 +87,7 @@ export default function App() {
       return (
         <div className='col' onClick={clickHandler(idx, jdx)}>
           {/* {children} */}
-          {d > 0 ? d : null}
+          {0 < d && d <= days_in_month ? d : null}
         </div>
       );
     };
