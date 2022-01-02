@@ -205,10 +205,30 @@ export default function App() {
       } else if (on_or_off === true && click_num !== null) {
         classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
       } else {
-        classes = `col off`;
+        classes = null;
       }
       return classes;
     };
+
+    // - - - - - - - - - - - - - - - - - - - - -
+
+    // const getHoverClasses = (idx, jdx) => {
+    //   let classes;
+    //   if (start_or_end(idx, jdx) === 'start') {
+    //     // left of starting click (round on left side)
+    //     classes = 'col on on-start';
+    //   } else if (start_or_end(idx, jdx) === 'end') {
+    //     classes = 'col on on-end';
+    //   } else if (start_or_end(idx, jdx) === 'start-and-end') {
+    //     classes = `col on-start-and-end`;
+    //     console.log('start and end');
+    //   } else if (on_or_off === true && click_num !== null) {
+    //     classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
+    //   } else {
+    //     classes = null;
+    //   }
+    //   return classes;
+    // };
 
     // - - - - - - - - - - - - - - - - - - - - -
 
@@ -252,14 +272,21 @@ export default function App() {
       if (click_num === 1) {
         // -Light up currently hovered:
         const hover_classes_copy = [...hover_classes];
-        // hover_classes_copy[hover_index] = 'col fuck';
-        // setHoverClasses(hover_classes_copy);
 
         for (let i = 0; i < hover_classes.length; ++i) {
+          const idx = i % 7;
+          const jdx = Math.floor(i / 7);
+
           if (date_range_0.lin_index <= hover_index) {
             // -Regular case (date_0 <= date_1 [hover])
             if (date_range_0.lin_index <= i && i <= hover_index) {
-              hover_classes_copy[i] = 'col fuck';
+              if (date_range_0.lin_index === i) {
+                hover_classes_copy[i] = 'col on on-start';
+              } else if (i === hover_index) {
+                hover_classes_copy[i] = 'col on on-end';
+              } else {
+                hover_classes_copy[i] = 'col on on-middle';
+              }
             } else {
               hover_classes_copy[i] = 'col';
             }
@@ -290,10 +317,11 @@ export default function App() {
       // Region 1: date_0 > date_1 (hover)  -  Backward
       // Region 2: date_0 = date_1 (hover)  -  Same day
 
-      // const classes = getClasses(idx, jdx);
+      const final_classes = getClasses(idx, jdx);
 
       return (
         <div
+          className={final_classes || hover_classes[lin_index] || 'col'}
           onClick={callback}
           onMouseEnter={() => {
             // const { lin_index } = indices2day(idx, jdx);
@@ -326,8 +354,6 @@ export default function App() {
             // setHover(false);
           }}
           ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
-          // className={`${classes} ${hover ? 'hover' : null}`}
-          className={hover_classes[lin_index] || 'col'}
         >
           {is_valid ? d : null}
         </div>
