@@ -8,12 +8,6 @@ import { getMonthInfo } from './date';
 export default function App() {
   // --------------------------------------------
 
-  // const [hover_index, setHoverIndex] = useState();
-
-  const prev_ref = useRef();
-
-  // --------------------------------------------
-
   const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d, idx, jdx}: {year: number, month: number, date: number, idx: number, jdx: number, lin_index: number}
   const [date_range_1, setDateRange1] = useState();
 
@@ -54,10 +48,8 @@ export default function App() {
 
   const resetDateRange = () => {
     setClickNum(null);
-    setIdxState0(null);
-    setJdxState0(null);
-    setIdxState1(null);
-    setJdxState1(null);
+    setDateRange0(null);
+    setDateRange1(null);
   };
 
   // --------------------------------------------
@@ -75,29 +67,6 @@ export default function App() {
         return 1; // first-click
       }
     });
-  const [idx_state_0, setIdxState0] = useState();
-  const [jdx_state_0, setJdxState0] = useState();
-  const [idx_state_1, setIdxState1] = useState();
-  const [jdx_state_1, setJdxState1] = useState();
-
-  const start_or_end = (idx, jdx) => {
-    if (
-      idx === idx_state_0 &&
-      jdx === jdx_state_0 &&
-      idx === idx_state_1 &&
-      jdx === jdx_state_1 &&
-      click_num === 0
-    ) {
-      // -Case 3: Date range is single day
-      return 'start-and-end';
-    } else if (idx === idx_state_0 && jdx === jdx_state_0) {
-      // -Case 1: Start of date range
-      return 'start';
-    } else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num !== 1) {
-      // -Case 2: End of date range
-      return 'end';
-    }
-  };
 
   // --------------------------------------------
 
@@ -105,28 +74,20 @@ export default function App() {
   const CalendarLayer0 = () => {
     // - - - - - - - - - - - - - - - - - - - - -
     const clickHandler = (idx, jdx) => (e) => {
-      // console.log(`idx: ${idx}\tjdx: ${jdx}`);
-
-      // const lin_index = idx * 7 + jdx;
-      // const d = lin_index - first_day + 1;
       const { d, lin_index } = indices2day(idx, jdx);
 
       if (click_num === 0 || !click_num) {
         // -1st date-range click
         // -1st click (click_num===null) and odd number clicks
-        setIdxState0(idx);
-        setJdxState0(jdx);
 
         // -Click handlers are applied only to valid region.
         //  => We can just store the date without checking validity.
         setDateRange0({ year, month, date: d, idx, jdx, lin_index });
+        setHoverIndex(lin_index); // trigger the useEffect callback to draw circle around currently hovered Col-element
       } else if (click_num === 1) {
         // -Second date-range click
         if (date_range_0.date <= d) {
           // -standard case (date-1 <= date-2)
-
-          setIdxState1(idx);
-          setJdxState1(jdx);
 
           // -Click handlers are applied only to valid region.
           //  => We can just store the date without checking validity.
@@ -135,13 +96,9 @@ export default function App() {
           // -backward case (date-1 > date-2)
 
           // -step 1: set click-2 state to click-1
-          setIdxState1(date_range_0.idx);
-          setJdxState1(date_range_0.jdx);
           setDateRange1({ ...date_range_0 });
 
           // -step 2: set date_range_0 to current values
-          setIdxState0(idx);
-          setJdxState0(jdx);
           setDateRange0({ year, month, date: d, idx, jdx, lin_index });
         }
       }
@@ -150,136 +107,26 @@ export default function App() {
 
     // - - - - - - - - - - - - - - - - - - - - -
 
-    // -Draw date range borders
-    const getClasses = (idx, jdx) => {
-      let on_or_off = false; // true -> on, false -> off
-      if (click_num === 0 || !click_num) {
-        // -1st click and odd number clicks (click_num===null before first click)
-        if (idx_state_0 === idx_state_1) {
-          // -Case 1: same row
-          on_or_off =
-            idx_state_0 <= idx &&
-            idx <= idx_state_1 &&
-            jdx_state_0 <= jdx &&
-            jdx <= jdx_state_1;
-        } else if (Math.abs(idx_state_0 - idx_state_1) === 1) {
-          // Case 2: adjacent rows
-          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
-            // -Starting row
-            // -turn on row from first click to end of row
-            on_or_off = true;
-          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
-            // -Ending row
-            // -turn of row from starting of row to second click
-            on_or_off = true;
-          }
-        } else {
-          // Case 3: start row and end row are more than one row appart
-          if (idx_state_0 === idx && jdx_state_0 <= jdx) {
-            // -Starting row
-            // -turn on row from first click to end of row
-            on_or_off = true;
-          } else if (idx_state_1 === idx && jdx <= jdx_state_1) {
-            // -Ending row
-            // -turn of row from starting of row to second click
-            on_or_off = true;
-          } else if (idx_state_0 < idx && idx < idx_state_1) {
-            // -Middle rows
-            // -turn on all middle row elements
-            on_or_off = true;
-          }
-        }
-      } else {
-        on_or_off = false;
-      }
-
-      let classes;
-      if (start_or_end(idx, jdx) === 'start') {
-        // left of starting click (round on left side)
-        classes = 'col on on-start';
-      } else if (start_or_end(idx, jdx) === 'end') {
-        classes = 'col on on-end';
-      } else if (start_or_end(idx, jdx) === 'start-and-end') {
-        classes = `col on-start-and-end`;
-        console.log('start and end');
-      } else if (on_or_off === true && click_num !== null) {
-        classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
-      } else {
-        classes = null;
-      }
-      return classes;
-    };
-
-    // - - - - - - - - - - - - - - - - - - - - -
-
-    // const getHoverClasses = (idx, jdx) => {
-    //   let classes;
-    //   if (start_or_end(idx, jdx) === 'start') {
-    //     // left of starting click (round on left side)
-    //     classes = 'col on on-start';
-    //   } else if (start_or_end(idx, jdx) === 'end') {
-    //     classes = 'col on on-end';
-    //   } else if (start_or_end(idx, jdx) === 'start-and-end') {
-    //     classes = `col on-start-and-end`;
-    //     console.log('start and end');
-    //   } else if (on_or_off === true && click_num !== null) {
-    //     classes = `col ${on_or_off ? 'on' : 'off'} on-middle`;
-    //   } else {
-    //     classes = null;
-    //   }
-    //   return classes;
-    // };
-
-    // - - - - - - - - - - - - - - - - - - - - -
-
-    const [region_state, setRegionState] = useState();
-    useEffect(() => {
-      if (click_num === 1) {
-        // -Flip the start style with the end style
-        //  if the hover index is less than the
-        //  first date index:
-
-        if (region_state === 2) {
-          console.log('region 2');
-          // -Same day case (date_0 === date_1)
-          prev_ref.current.classList.remove('on-start');
-          prev_ref.current.classList.remove('on-end');
-          prev_ref.current.classList.add('on-start-and-end');
-        } else if (region_state === 0) {
-          console.log('region 0');
-          // -Standard case
-          // prev_ref.current.classList.replace('on-end', 'on-start');
-          prev_ref.current.classList.remove('on-start-and-end');
-          prev_ref.current.classList.remove('on-end');
-          prev_ref.current.classList.add('on-start');
-        } else if (region_state === 1) {
-          console.log('region 1');
-          // -Reverse case (date_0 > date_1)
-          // prev_ref.current.classList.replace('on-start', 'on-end');
-          prev_ref.current.classList.remove('on-start-and-end');
-          prev_ref.current.classList.remove('on-start');
-          prev_ref.current.classList.add('on-end');
-        }
-      }
-    }, [region_state]);
-
-    // - - - - - - - - - - - - - - - - - - - - -
-
     const [hover_classes, setHoverClasses] = useState(new Array(7 * 7));
     const [hover_index, setHoverIndex] = useState();
 
     useEffect(() => {
+      // if (click_num === null) {
+      //   // -Openeing state (user has not clicked yet)
+      //   const hover_classes_copy = [...hover_classes];
+      //   hover_classes_copy[hover_index] = 'col on on-start-and-end';
+      //   setHoverClasses(hover_classes_copy);
+      // }
+
       if (click_num === 1) {
         // -Light up currently hovered:
         const hover_classes_copy = [...hover_classes];
 
         for (let i = 0; i < hover_classes.length; ++i) {
-          const idx = i % 7;
-          const jdx = Math.floor(i / 7);
-
-          if (date_range_0.lin_index <= hover_index) {
+          if (date_range_0.lin_index < hover_index) {
             // -Regular case (date_0 <= date_1 [hover])
             if (date_range_0.lin_index <= i && i <= hover_index) {
+              // -[date_range_0.lin_index, hover_index]
               if (date_range_0.lin_index === i) {
                 hover_classes_copy[i] = 'col on on-start';
               } else if (i === hover_index) {
@@ -288,17 +135,36 @@ export default function App() {
                 hover_classes_copy[i] = 'col on on-middle';
               }
             } else {
+              // -[0, date_range_0.lin_index) || (date_range_0.lin_index, 7 * 7 - 1)
+              hover_classes_copy[i] = 'col';
+            }
+          } else if (hover_index < date_range_0.lin_index) {
+            // -Backwards case (date_0 > date_1)
+            if (hover_index <= i && i <= date_range_0.lin_index) {
+              // -[hover_index, date_range_0.lin_index]
+              if (date_range_0.lin_index === i) {
+                hover_classes_copy[i] = 'col on on-end';
+              } else if (i === hover_index) {
+                hover_classes_copy[i] = 'col on on-start';
+              } else {
+                hover_classes_copy[i] = 'col on on-middle';
+              }
+            } else {
+              // -[0, hover_index) || (hover_index, 7 * 7 - 1)
               hover_classes_copy[i] = 'col';
             }
           } else {
-            // -Backwards case (date_0 > date_1)
-            if (hover_index <= i && i <= date_range_0.lin_index) {
-              hover_classes_copy[i] = 'col fuck';
+            console.log('j');
+            if (hover_index === i && i === date_range_0.lin_index) {
+              // -hovered on the same day as date_0
+              hover_classes_copy[i] = 'col on on-start-and-end';
             } else {
               hover_classes_copy[i] = 'col';
             }
           }
         }
+
+        // hover_classes_copy[date_range_0.lin_index] = 'col on on-end';
         setHoverClasses(hover_classes_copy);
       }
     }, [hover_index]);
@@ -317,43 +183,23 @@ export default function App() {
       // Region 1: date_0 > date_1 (hover)  -  Backward
       // Region 2: date_0 = date_1 (hover)  -  Same day
 
-      const final_classes = getClasses(idx, jdx);
-
       return (
         <div
-          className={final_classes || hover_classes[lin_index] || 'col'}
+          className={hover_classes[lin_index] || 'col'}
           onClick={callback}
           onMouseEnter={() => {
-            // const { lin_index } = indices2day(idx, jdx);
-
             if (click_num !== 0 && is_valid) {
               // -Three click_num states:
               //  --null. Before first click
               //  --1.    After first (and odd-numbered) click(s)
               //  --0.    After second (and even-numbered) click(s)
-              // setHover(true);
-              const hover_classes_copy = [...hover_classes];
-              hover_classes_copy[lin_index] = getClasses(idx, jdx);
-              // setHoverClasses(hover_classes_copy);
-
               setHoverIndex(lin_index);
-            }
-
-            // -Don't need region state
-            // -Instead, can simply use the hover_index state
-            //  to infer the region the lin_index is located in.
-            if (lin_index === date_range_0?.lin_index) {
-              setRegionState(2);
-            } else if (date_range_0?.lin_index < lin_index) {
-              setRegionState(0);
-            } else if (lin_index < date_range_0?.lin_index) {
-              setRegionState(1);
             }
           }}
           onMouseLeave={() => {
             // setHover(false);
           }}
-          ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
+          // ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
         >
           {is_valid ? d : null}
         </div>
