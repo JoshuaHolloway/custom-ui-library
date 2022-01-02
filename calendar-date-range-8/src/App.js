@@ -245,13 +245,33 @@ export default function App() {
 
     // - - - - - - - - - - - - - - - - - - - - -
 
-    const [hover_classes, setHoverClasses] = useState([]);
+    const [hover_classes, setHoverClasses] = useState(new Array(7 * 7));
     const [hover_index, setHoverIndex] = useState();
 
     useEffect(() => {
       if (click_num === 1) {
+        // -Light up currently hovered:
         const hover_classes_copy = [...hover_classes];
-        hover_classes_copy[hover_index] = 'col fuck';
+        // hover_classes_copy[hover_index] = 'col fuck';
+        // setHoverClasses(hover_classes_copy);
+
+        for (let i = 0; i < hover_classes.length; ++i) {
+          if (date_range_0.lin_index <= hover_index) {
+            // -Regular case (date_0 <= date_1 [hover])
+            if (date_range_0.lin_index <= i && i <= hover_index) {
+              hover_classes_copy[i] = 'col fuck';
+            } else {
+              hover_classes_copy[i] = 'col';
+            }
+          } else {
+            // -Backwards case (date_0 > date_1)
+            if (hover_index <= i && i <= date_range_0.lin_index) {
+              hover_classes_copy[i] = 'col fuck';
+            } else {
+              hover_classes_copy[i] = 'col';
+            }
+          }
+        }
         setHoverClasses(hover_classes_copy);
       }
     }, [hover_index]);
@@ -271,7 +291,6 @@ export default function App() {
       // Region 2: date_0 = date_1 (hover)  -  Same day
 
       // const classes = getClasses(idx, jdx);
-      let classes = 'col';
 
       return (
         <div
