@@ -80,10 +80,12 @@ export default function App() {
         // -1st date-range click
         // -1st click (click_num===null) and odd number clicks
 
+        // trigger the useEffect callback to draw circle around currently hovered Col-element
+        setHoverIndex(lin_index);
+
         // -Click handlers are applied only to valid region.
         //  => We can just store the date without checking validity.
         setDateRange0({ year, month, date: d, idx, jdx, lin_index });
-        setHoverIndex(lin_index); // trigger the useEffect callback to draw circle around currently hovered Col-element
       } else if (click_num === 1) {
         // -Second date-range click
         if (date_range_0.date <= d) {
@@ -111,14 +113,18 @@ export default function App() {
     const [hover_index, setHoverIndex] = useState();
 
     useEffect(() => {
-      // if (click_num === null) {
-      //   // -Openeing state (user has not clicked yet)
-      //   const hover_classes_copy = [...hover_classes];
-      //   hover_classes_copy[hover_index] = 'col on on-start-and-end';
-      //   setHoverClasses(hover_classes_copy);
-      // }
-
-      if (click_num === 1) {
+      if (click_num === null) {
+        // -Openeing state (user has not clicked yet)
+        const hover_classes_copy = [...hover_classes];
+        for (let i = 0; i < hover_classes.length; ++i) {
+          if (i === hover_index) {
+            hover_classes_copy[i] = 'col on on-start-and-end';
+          } else {
+            hover_classes_copy[i] = 'col';
+          }
+        }
+        setHoverClasses(hover_classes_copy);
+      } else if (click_num === 1) {
         // -Light up currently hovered:
         const hover_classes_copy = [...hover_classes];
 
@@ -154,7 +160,12 @@ export default function App() {
               hover_classes_copy[i] = 'col';
             }
           } else {
-            console.log('j');
+            console.log(
+              'hover_index: ',
+              hover_index,
+              '\tdate_range_0.lin_index: ',
+              date_range_0.lin_index
+            );
             if (hover_index === i && i === date_range_0.lin_index) {
               // -hovered on the same day as date_0
               hover_classes_copy[i] = 'col on on-start-and-end';
