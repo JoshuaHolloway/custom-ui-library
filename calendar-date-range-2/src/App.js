@@ -1,8 +1,33 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import { getMonthInfo } from './date';
 // import { ROWS, COLS } from './constants';
 
 export default function App() {
+  // --------------------------------------------
+
+  const [month, setMonth] = useState();
+  const [year, setYear] = useState();
+
+  const [days_in_month, setDaysInMonth] = useState();
+  const [first_day, setFirstDay] = useState();
+
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const {
+      days_in_month: d_in_m,
+      first_day: f_d,
+      first_day_str,
+    } = getMonthInfo(year, month);
+    console.log('first_day: ', f_d);
+
+    setDaysInMonth(d_in_m);
+    setFirstDay(f_d);
+  }, []);
+
   // --------------------------------------------
 
   const [click_num, setClickNum] = useState(0);
@@ -50,25 +75,49 @@ export default function App() {
     };
 
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
-    const Col = ({ idx, jdx }) => (
-      <div className='col' onClick={clickHandler(idx, jdx)}>
-        {start_or_end(idx, jdx) === 'start' ? 'start' : null}
-        {start_or_end(idx, jdx) === 'end' ? 'end' : null}
-        {start_or_end(idx, jdx) === 'start-and-end' ? 'start and end' : null}
-      </div>
-    );
+    const Col = ({ idx, jdx, children }) => {
+      // 7 = num-days-in-week === num elements in each row
+      const lin = idx * 7 + jdx;
+      const d = lin - first_day + 1;
+      // -days are 1-based
+      // -this indexing is zero-based
+      // -adjust by adding 1
+      // -without the +1 the first day of the month is labeld as zero
+
+      return (
+        <div className='col' onClick={clickHandler(idx, jdx)}>
+          {/* {children} */}
+          {d > 0 ? d : null}
+        </div>
+      );
+    };
+
+    let days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
     return (
       <div className='calendar-container'>
-        <div style={{ background: 'darkorchid' }}></div>
+        <div className='row day-titles'>
+          {days.map((day) => {
+            return (
+              <div key={day} className='day-title'>
+                <p>{day}</p>
+              </div>
+            );
+          })}
+        </div>
         <Row idx={0}>
-          <Col idx={0} jdx={0} />
-          <Col idx={0} jdx={1} />
-          <Col idx={0} jdx={2} />
-          <Col idx={0} jdx={3} />
-          <Col idx={0} jdx={4} />
-          <Col idx={0} jdx={5} />
-          <Col idx={0} jdx={6} />
+          {days.map((day, jdx) => {
+            // if (jdx >= first_day) {
+            //   return <Col key={day} idx={0} jdx={jdx} />;
+            // } else {
+            //   return null;
+            // }
+            return (
+              <Col key={day} idx={0} jdx={jdx}>
+                {/* {jdx >= first_day ? 7 - first_day : null} */}
+              </Col>
+            );
+          })}
         </Row>
         <Row idx={1}>
           <Col idx={1} jdx={0} />
@@ -114,15 +163,6 @@ export default function App() {
           <Col idx={5} jdx={4} />
           <Col idx={5} jdx={5} />
           <Col idx={5} jdx={6} />
-        </Row>
-        <Row idx={6}>
-          <Col idx={6} jdx={0} />
-          <Col idx={6} jdx={1} />
-          <Col idx={6} jdx={2} />
-          <Col idx={6} jdx={3} />
-          <Col idx={6} jdx={4} />
-          <Col idx={6} jdx={5} />
-          <Col idx={6} jdx={6} />
         </Row>
       </div>
     );
@@ -194,6 +234,7 @@ export default function App() {
 
     return (
       <div className='calendar-container'>
+        <div style={{ background: 'darkorchid' }}></div>
         <Row idx={0}>
           <Col idx={0} jdx={0} />
           <Col idx={0} jdx={1} />
@@ -247,15 +288,6 @@ export default function App() {
           <Col idx={5} jdx={4} />
           <Col idx={5} jdx={5} />
           <Col idx={5} jdx={6} />
-        </Row>
-        <Row idx={6}>
-          <Col idx={6} jdx={0} />
-          <Col idx={6} jdx={1} />
-          <Col idx={6} jdx={2} />
-          <Col idx={6} jdx={3} />
-          <Col idx={6} jdx={4} />
-          <Col idx={6} jdx={5} />
-          <Col idx={6} jdx={6} />
         </Row>
       </div>
     );
