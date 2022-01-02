@@ -44,8 +44,19 @@ export default function App() {
 
   // --------------------------------------------
 
-  const [click_num, setClickNum] = useState(0);
-  const handleClickNum = () => setClickNum((prev) => (prev + 1) % 2);
+  const [click_num, setClickNum] = useState(null);
+  const handleClickNum = () =>
+    setClickNum((prev) => {
+      if (click_num) {
+        return (prev + 1) % 2;
+      } else {
+        // -used to distinguish the very first click from the other ones (before first click_num is undefined)
+        // -specifically used for the hover
+        //  --We want the hover to work before any clicks.
+        //  --But after that we only want it to work between first and second clicks.
+        return 1; // first-click
+      }
+    });
   const [idx_state_0, setIdxState0] = useState();
   const [jdx_state_0, setJdxState0] = useState();
   const [idx_state_1, setIdxState1] = useState();
@@ -64,7 +75,7 @@ export default function App() {
     } else if (idx === idx_state_0 && jdx === jdx_state_0) {
       // -Case 1: Start of date range
       return 'start';
-    } else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num === 0) {
+    } else if (idx === idx_state_1 && jdx === jdx_state_1 && click_num !== 1) {
       // -Case 2: End of date range
       return 'end';
     }
@@ -76,7 +87,8 @@ export default function App() {
     const clickHandler = (idx, jdx) => (e) => {
       // console.log(`idx: ${idx}\tjdx: ${jdx}`);
 
-      if (click_num === 0) {
+      if (click_num === 0 || !click_num) {
+        // -1st click (click_num===null) and odd number clicks
         setIdxState0(idx);
         setJdxState0(jdx);
       } else if (click_num === 1) {
@@ -318,7 +330,8 @@ export default function App() {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
       let on_or_off = false; // true -> on, false -> off
-      if (click_num === 0) {
+      if (click_num === 0 || !click_num) {
+        // -1st click and odd number clicks (click_num===null before first click)
         if (idx_state_0 === idx_state_1) {
           // -Case 1: same row
           on_or_off =
@@ -373,7 +386,10 @@ export default function App() {
       }
 
       const lin_index = idx * 7 + jdx;
-      if (lin_index === hover_index) {
+      const d = lin_index - first_day + 1;
+      const is_valid = 0 < d && d <= days_in_month;
+
+      if (lin_index === hover_index && is_valid && click_num !== 0) {
         classes = `${classes} hover`;
       }
 
