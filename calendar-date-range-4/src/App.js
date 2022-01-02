@@ -3,6 +3,8 @@ import './App.css';
 import { getMonthInfo } from './date';
 // import { ROWS, COLS } from './constants';
 
+// ==============================================
+
 export default function App() {
   const [hover_index, setHoverIndex] = useState();
 
@@ -15,7 +17,13 @@ export default function App() {
   const [year, setYear] = useState();
 
   const [days_in_month, setDaysInMonth] = useState();
-  const [first_day, setFirstDay] = useState();
+  const [first_day, setFirstDay] = useState(); // first_day: number
+
+  const indices2day = (idx, jdx) => {
+    const lin_index = idx * 7 + jdx;
+    const d = lin_index - first_day + 1;
+    return { lin_index, d };
+  };
 
   useEffect(() => {
     const today = new Date();
@@ -102,8 +110,9 @@ export default function App() {
     const clickHandler = (idx, jdx) => (e) => {
       // console.log(`idx: ${idx}\tjdx: ${jdx}`);
 
-      const lin_index = idx * 7 + jdx;
-      const d = lin_index - first_day + 1;
+      // const lin_index = idx * 7 + jdx;
+      // const d = lin_index - first_day + 1;
+      const { d } = indices2day(idx, jdx);
 
       if (click_num === 0 || !click_num) {
         // -1st date-range click
@@ -131,8 +140,10 @@ export default function App() {
     const Row = ({ idx, children }) => <div className='row'>{children}</div>;
     const Col = ({ idx, jdx, children }) => {
       // 7 = num-days-in-week === num elements in each row
-      const lin_index = idx * 7 + jdx;
-      const d = lin_index - first_day + 1;
+      // const lin_index = idx * 7 + jdx;
+      // const d = lin_index - first_day + 1;
+      const { d, lin_index } = indices2day(idx, jdx);
+
       // -days are 1-based
       // -this indexing is zero-based
       // -adjust by adding 1
@@ -234,7 +245,7 @@ export default function App() {
                 fontSize: '1.8em',
               }}
             >
-              <h2>
+              <h3>
                 {
                   [
                     'Jan',
@@ -252,7 +263,7 @@ export default function App() {
                   ][month]
                 }{' '}
                 {year}
-              </h2>
+              </h3>
             </div>
 
             <svg
@@ -412,6 +423,11 @@ export default function App() {
         on_or_off = false;
       }
 
+      // const lin_index = idx * 7 + jdx;
+      // const d = lin_index - first_day + 1;
+
+      const { d, lin_index } = indices2day(idx, jdx);
+
       let classes;
       if (start_or_end(idx, jdx) === 'start') {
         // left of starting click (round on left side)
@@ -427,10 +443,7 @@ export default function App() {
         classes = `col off`;
       }
 
-      const lin_index = idx * 7 + jdx;
-      const d = lin_index - first_day + 1;
       const is_valid = 0 < d && d <= days_in_month;
-
       if (lin_index === hover_index && is_valid && click_num !== 0) {
         classes = `${classes} hover`;
       }
