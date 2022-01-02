@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { getMonthInfo } from './date';
 // import { ROWS, COLS } from './constants';
@@ -6,11 +6,15 @@ import { getMonthInfo } from './date';
 // ==============================================
 
 export default function App() {
-  const [hover_index, setHoverIndex] = useState();
+  // --------------------------------------------
+
+  // const [hover_index, setHoverIndex] = useState();
+
+  const prev_ref = useRef();
 
   // --------------------------------------------
 
-  const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d, idx, jdx}: {year: number, month: number, date: number, idx: number, jdx: number}
+  const [date_range_0, setDateRange0] = useState(); // {year: y, month: m, date: d, idx, jdx}: {year: number, month: number, date: number, idx: number, jdx: number, lin_index: number}
   const [date_range_1, setDateRange1] = useState();
 
   const [month, setMonth] = useState();
@@ -23,6 +27,11 @@ export default function App() {
     // 7 = num-days-in-week === num elements in each row
     const lin_index = idx * 7 + jdx;
     const d = lin_index - first_day + 1;
+    // -days are 1-based
+    // -this indexing is zero-based
+    // -adjust by adding 1
+    // -without the +1 the first day of the month is labeld as zero
+
     const is_valid = 0 < d && d <= days_in_month;
     return { is_valid, lin_index, d };
   };
@@ -100,7 +109,7 @@ export default function App() {
 
       // const lin_index = idx * 7 + jdx;
       // const d = lin_index - first_day + 1;
-      const { d } = indices2day(idx, jdx);
+      const { d, lin_index } = indices2day(idx, jdx);
 
       if (click_num === 0 || !click_num) {
         // -1st date-range click
@@ -110,7 +119,7 @@ export default function App() {
 
         // -Click handlers are applied only to valid region.
         //  => We can just store the date without checking validity.
-        setDateRange0({ year, month, date: d, idx, jdx });
+        setDateRange0({ year, month, date: d, idx, jdx, lin_index });
       } else if (click_num === 1) {
         // -Second date-range click
         if (date_range_0.date <= d) {
@@ -121,7 +130,7 @@ export default function App() {
 
           // -Click handlers are applied only to valid region.
           //  => We can just store the date without checking validity.
-          setDateRange1({ year, month, date: d, idx, jdx });
+          setDateRange1({ year, month, date: d, idx, jdx, lin_index });
         } else {
           // -backward case (date-1 > date-2)
 
@@ -133,7 +142,7 @@ export default function App() {
           // -step 2: set date_range_0 to current values
           setIdxState0(idx);
           setJdxState0(jdx);
-          setDateRange0({ year, month, date: d, idx, jdx });
+          setDateRange0({ year, month, date: d, idx, jdx, lin_index });
         }
       }
       handleClickNum();
@@ -145,29 +154,46 @@ export default function App() {
     const Col = ({ idx, jdx, children }) => {
       const { d, lin_index, is_valid } = indices2day(idx, jdx);
 
-      // -days are 1-based
-      // -this indexing is zero-based
-      // -adjust by adding 1
-      // -without the +1 the first day of the month is labeld as zero
-
       const callback = is_valid ? clickHandler(idx, jdx) : () => {};
+
+      const [hover, setHover] = useState(false);
 
       return (
         <div
-          className='col'
+          className={`col ${hover ? 'hover' : null}`}
           onClick={callback}
           onMouseEnter={() => {
-            setHoverIndex(lin_index);
+            if (click_num === null) {
+              // -Before first click
+              // -We don't yet have date_range_0.lin_index
+              // -We want before first click and in between odd
+              //  and even clicks to set the hover style
+              setHover(true);
+            } else if (click_num === 1) {
+              setHover(true);
+
+              // -Flip the start style with the end style
+              //  if the hover index is less than the
+              //  first date index:
+              if (lin_index < date_range_0.lin_index) {
+                prev_ref.current.classList.replace('on-start', 'on-end');
+              } else {
+                prev_ref.current.classList.replace('on-end', 'on-start');
+              }
+            }
+
+            // setHoverIndex(lin_index);
           }}
           onMouseLeave={() => {
-            setHoverIndex(null);
+            // setHoverIndex(null);
+            setHover(false);
           }}
         >
           {/* {children} */}
           {is_valid ? d : null}
         </div>
       );
-    };
+    }; // <Col />
 
     // - - - - - - - - - - - - - - - - - - - - -
 
@@ -377,6 +403,8 @@ export default function App() {
 
   // --------------------------------------------
 
+  let count = 0;
+
   // -Layer 1: Graphical Output
   const CalendarLayer1 = () => {
     // - - - - - - - - - - - - - - - - - - - - -
@@ -423,7 +451,9 @@ export default function App() {
         on_or_off = false;
       }
 
-      const { d, lin_index, is_valid } = indices2day(idx, jdx);
+      // const { lin_index, is_valid } = indices2day(idx, jdx);
+
+      // -This code should not run on hover
 
       // -Draw date range borders
       let classes;
@@ -431,16 +461,7 @@ export default function App() {
         // left of starting click (round on left side)
         classes = 'col on on-start';
       } else if (start_or_end(idx, jdx) === 'end') {
-        // -test for date-1 > date-2 (backward case)
-        if (date_range_0.date < d) {
-          // -standard case (date-1 < date-2)
-          classes = 'col on on-end';
-        } else if (date_range_0.date > d) {
-          // -backward case (date-1 > date-2)
-
-          // -Step 1: set CSS on 2nd-clicked element to the draw as the start of date range (round on left)
-          classes = 'col on on-start';
-        }
+        classes = 'col on on-end';
       } else if (start_or_end(idx, jdx) === 'start-and-end') {
         classes = `col on-start-and-end`;
         console.log('start and end');
@@ -450,12 +471,33 @@ export default function App() {
         classes = `col off`;
       }
 
-      if (lin_index === hover_index && is_valid && click_num !== 0) {
-        classes = `${classes} hover`;
-      }
+      // if (lin_index === hover_index && is_valid && click_num !== 0) {
+      //   classes = `${classes} hover`;
+      // }
 
-      // const on_or_off = false;
-      return <div className={classes}>{children}</div>;
+      console.log(
+        'RUNNING CSS CODE, prev_ref: ',
+        prev_ref,
+        '\tcount: ',
+        count++
+      );
+
+      if (
+        start_or_end(idx, jdx) === 'start' ||
+        start_or_end(idx, jdx) === 'start-and-end'
+      ) {
+        // -point prev_ref to the end element
+        // -this allows us to easily change the css classes on this element
+        // -we use this when the hover for date-2' lin_index  < lin_index of date_1
+        //  --In this case we swap the css-class 'start' with 'end'
+        return (
+          <div ref={prev_ref} className={classes}>
+            {children}
+          </div>
+        );
+      } else {
+        return <div className={classes}>{children}</div>;
+      }
     };
 
     // - - - - - - - - - - - - - - - - - - - - -
