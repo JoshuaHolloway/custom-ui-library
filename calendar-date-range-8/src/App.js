@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { getMonthInfo } from './date';
 // import { ROWS, COLS } from './constants';
@@ -17,6 +17,25 @@ export default function App() {
   const [days_in_month, setDaysInMonth] = useState();
   const [first_day, setFirstDay] = useState(); // first_day: number
 
+  // --------------------------------------------
+
+  // -Three click_num states:
+  //  --null. Before first click
+  //  --1.    After first (and odd-numbered) click(s)
+  //  --0.    After second (and even-numbered) click(s)
+  const [click_num, setClickNum] = useState(null);
+  const handleClickNum = () => setClickNum((prev) => (prev || 0 + 1) % 2);
+
+  // --------------------------------------------
+
+  const resetDateRange = () => {
+    setClickNum(null);
+    setDateRange0(null);
+    setDateRange1(null);
+  };
+
+  // --------------------------------------------
+
   const indices2day = (idx, jdx) => {
     // 7 = num-days-in-week === num elements in each row
     const lin_index = idx * 7 + jdx;
@@ -29,6 +48,8 @@ export default function App() {
     const is_valid = 0 < d && d <= days_in_month;
     return { is_valid, lin_index, d };
   };
+
+  // --------------------------------------------
 
   useEffect(() => {
     const today = new Date();
@@ -46,30 +67,6 @@ export default function App() {
 
   // --------------------------------------------
 
-  const resetDateRange = () => {
-    setClickNum(null);
-    setDateRange0(null);
-    setDateRange1(null);
-  };
-
-  // --------------------------------------------
-
-  const [click_num, setClickNum] = useState(null);
-  const handleClickNum = () =>
-    setClickNum((prev) => {
-      if (click_num) {
-        return (prev + 1) % 2;
-      } else {
-        // -used to distinguish the very first click from the other ones (before first click_num is null)
-        // -specifically used for the hover
-        //  --We want the hover to work before any clicks.
-        //  --But after that we only want it to work between first and second clicks.
-        return 1; // first-click
-      }
-    });
-
-  // --------------------------------------------
-
   // -Layer 0: Click input handling logic
   const CalendarLayer0 = () => {
     // - - - - - - - - - - - - - - - - - - - - -
@@ -79,9 +76,6 @@ export default function App() {
       if (click_num === 0 || !click_num) {
         // -1st date-range click
         // -1st click (click_num===null) and odd number clicks
-
-        // trigger the useEffect callback to draw circle around currently hovered Col-element
-        setHoverIndex(lin_index);
 
         // -Click handlers are applied only to valid region.
         //  => We can just store the date without checking validity.
@@ -113,9 +107,13 @@ export default function App() {
     const [hover_index, setHoverIndex] = useState();
 
     useEffect(() => {
+      const hover_classes_copy = [...hover_classes];
+
+      console.log('HERE 0');
+
       if (click_num === null) {
+        console.log('HERE click_num === null');
         // -Openeing state (user has not clicked yet)
-        const hover_classes_copy = [...hover_classes];
         for (let i = 0; i < hover_classes.length; ++i) {
           if (i === hover_index) {
             hover_classes_copy[i] = 'col on on-start-and-end';
@@ -123,61 +121,56 @@ export default function App() {
             hover_classes_copy[i] = 'col';
           }
         }
-        setHoverClasses(hover_classes_copy);
       } else if (click_num === 1) {
-        // -Light up currently hovered:
-        const hover_classes_copy = [...hover_classes];
+        console.log('HERE 1');
 
-        for (let i = 0; i < hover_classes.length; ++i) {
-          if (date_range_0.lin_index < hover_index) {
-            // -Regular case (date_0 <= date_1 [hover])
-            if (date_range_0.lin_index <= i && i <= hover_index) {
-              // -[date_range_0.lin_index, hover_index]
-              if (date_range_0.lin_index === i) {
-                hover_classes_copy[i] = 'col on on-start';
-              } else if (i === hover_index) {
-                hover_classes_copy[i] = 'col on on-end';
+        if (hover_index) {
+          for (let i = 0; i < hover_classes.length; ++i) {
+            if (date_range_0.lin_index < hover_index) {
+              // -Regular case (date_0 <= date_1 [hover])
+              if (date_range_0.lin_index <= i && i <= hover_index) {
+                // -[date_range_0.lin_index, hover_index]
+                if (date_range_0.lin_index === i) {
+                  hover_classes_copy[i] = 'col on on-start';
+                } else if (i === hover_index) {
+                  hover_classes_copy[i] = 'col on on-end';
+                } else {
+                  hover_classes_copy[i] = 'col on on-middle';
+                }
               } else {
-                hover_classes_copy[i] = 'col on on-middle';
+                // -[0, date_range_0.lin_index) || (date_range_0.lin_index, 7 * 7 - 1)
+                hover_classes_copy[i] = 'col';
+              }
+            } else if (hover_index < date_range_0.lin_index) {
+              // -Backwards case (date_0 > date_1)
+              if (hover_index <= i && i <= date_range_0.lin_index) {
+                // -[hover_index, date_range_0.lin_index]
+                if (date_range_0.lin_index === i) {
+                  hover_classes_copy[i] = 'col on on-end';
+                } else if (i === hover_index) {
+                  hover_classes_copy[i] = 'col on on-start';
+                } else {
+                  hover_classes_copy[i] = 'col on on-middle';
+                }
+              } else {
+                // -[0, hover_index) || (hover_index, 7 * 7 - 1)
+                hover_classes_copy[i] = 'col';
               }
             } else {
-              // -[0, date_range_0.lin_index) || (date_range_0.lin_index, 7 * 7 - 1)
-              hover_classes_copy[i] = 'col';
-            }
-          } else if (hover_index < date_range_0.lin_index) {
-            // -Backwards case (date_0 > date_1)
-            if (hover_index <= i && i <= date_range_0.lin_index) {
-              // -[hover_index, date_range_0.lin_index]
-              if (date_range_0.lin_index === i) {
-                hover_classes_copy[i] = 'col on on-end';
-              } else if (i === hover_index) {
-                hover_classes_copy[i] = 'col on on-start';
+              if (hover_index === i && i === date_range_0.lin_index) {
+                // -hovered on the same day as date_0
+                hover_classes_copy[i] = 'col on on-start-and-end';
               } else {
-                hover_classes_copy[i] = 'col on on-middle';
+                hover_classes_copy[i] = 'col';
               }
-            } else {
-              // -[0, hover_index) || (hover_index, 7 * 7 - 1)
-              hover_classes_copy[i] = 'col';
-            }
-          } else {
-            console.log(
-              'hover_index: ',
-              hover_index,
-              '\tdate_range_0.lin_index: ',
-              date_range_0.lin_index
-            );
-            if (hover_index === i && i === date_range_0.lin_index) {
-              // -hovered on the same day as date_0
-              hover_classes_copy[i] = 'col on on-start-and-end';
-            } else {
-              hover_classes_copy[i] = 'col';
             }
           }
+        } else {
+          hover_classes_copy[date_range_0.lin_index] =
+            'col on on-start-and-end';
         }
-
-        // hover_classes_copy[date_range_0.lin_index] = 'col on on-end';
-        setHoverClasses(hover_classes_copy);
       }
+      setHoverClasses(hover_classes_copy);
     }, [hover_index]);
 
     // - - - - - - - - - - - - - - - - - - - - -
@@ -188,29 +181,15 @@ export default function App() {
 
       const callback = is_valid ? clickHandler(idx, jdx) : () => {};
 
-      // const [hover, setHover] = useState(false);
-
-      // Region 0: date_0 < date_1 (hover)  -  Regular
-      // Region 1: date_0 > date_1 (hover)  -  Backward
-      // Region 2: date_0 = date_1 (hover)  -  Same day
-
       return (
         <div
           className={hover_classes[lin_index] || 'col'}
           onClick={callback}
           onMouseEnter={() => {
             if (click_num !== 0 && is_valid) {
-              // -Three click_num states:
-              //  --null. Before first click
-              //  --1.    After first (and odd-numbered) click(s)
-              //  --0.    After second (and even-numbered) click(s)
               setHoverIndex(lin_index);
             }
           }}
-          onMouseLeave={() => {
-            // setHover(false);
-          }}
-          // ref={start_or_end(idx, jdx) === 'start' ? prev_ref : null}
         >
           {is_valid ? d : null}
         </div>
