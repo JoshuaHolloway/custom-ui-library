@@ -125,6 +125,23 @@ export default function Calendar() {
     }
   };
 
+  useEffect(() => {
+    // -Set the first click after resetting (on the third click)
+    // -Flow goes like this:
+    //    clickHandler()  ->  handleClickNum()  ->  useEffect(() => {}, [click_num])
+    if (click_num === null) {
+      const hover_classes_copy = [...hover_classes];
+      for (let i = 0; i < hover_classes.length; ++i) {
+        if (i === hover_index) {
+          hover_classes_copy[hover_index] = 'col on on-start-and-end';
+        } else {
+          hover_classes_copy[i] = 'col';
+        }
+      }
+      setHoverClasses(hover_classes_copy);
+    }
+  }, [click_num]);
+
   // --------------------------------------------
 
   // const [final_state, setFinalState] = useState(false);
