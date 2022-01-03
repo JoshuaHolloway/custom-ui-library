@@ -287,6 +287,7 @@ export default function Calendar() {
               viewBox='0 0 16 16'
               onClick={() => {
                 resetDateRange();
+                setHoverIndex(null);
 
                 if (0 <= month - 1) {
                   setMonth((prev) => {
@@ -357,6 +358,7 @@ export default function Calendar() {
               viewBox='0 0 16 16'
               onClick={() => {
                 resetDateRange();
+                setHoverIndex(null);
 
                 if (month + 1 < 12) {
                   setMonth((prev) => {
