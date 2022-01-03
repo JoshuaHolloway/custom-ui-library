@@ -237,7 +237,7 @@ export default function Calendar() {
         className={hover_classes[lin_index] || 'col'}
         onClick={callback}
         onMouseEnter={() => {
-          if (click_num !== 0 && is_valid) {
+          if (click_num !== 2 && is_valid) {
             setHoverIndex(lin_index);
           }
         }}
@@ -249,7 +249,21 @@ export default function Calendar() {
 
   // --------------------------------------------
 
-  let days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   // --------------------------------------------
 
@@ -330,23 +344,7 @@ export default function Calendar() {
               }}
             >
               <h3>
-                {
-                  [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                  ][month]
-                }{' '}
-                {year}
+                {months[month]} {year}
               </h3>
             </div>
 
@@ -406,7 +404,7 @@ export default function Calendar() {
         </div>
 
         {[...new Array(7)].map((week, idx) => (
-          <Row idx={idx}>
+          <Row key={idx} idx={idx}>
             {days.map((day, jdx) => (
               <Col key={idx * 7 + jdx} idx={idx} jdx={jdx} />
             ))}
