@@ -59,10 +59,19 @@ export default function Calendar() {
 
   // --------------------------------------------
 
+  const resetDateRangeGUI = () => {
+    const hover_classes_copy = [...hover_classes];
+    for (let i = 0; i < hover_classes.length; ++i) {
+      hover_classes_copy[i] = 'col';
+    }
+    setHoverClasses(hover_classes_copy);
+  };
+
   const resetDateRange = () => {
     setClickNum(null);
     setDateRange0(null);
     setDateRange1(null);
+    resetDateRangeGUI();
   };
 
   // --------------------------------------------
@@ -110,15 +119,7 @@ export default function Calendar() {
         setDateRange0({ year, month, date: d, idx, jdx, lin_index });
       }
     } else if (click_num === 2) {
-      // setDateRange0({ lin_index: 0 });
-      // setDateRange1(null);
-      // setHoverIndex(0);
-
-      const hover_classes_copy = [...hover_classes];
-      for (let i = 0; i < hover_classes.length; ++i) {
-        hover_classes_copy[i] = 'col';
-      }
-      setHoverClasses(hover_classes_copy);
+      resetDateRangeGUI();
     }
     handleClickNum();
   };
