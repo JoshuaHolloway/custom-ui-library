@@ -101,9 +101,10 @@ export default function Calendar() {
       // -Click handlers are applied only to valid region.
       //  => We can just store the date without checking validity.
       setDateRange0({ year, month, date: d, idx, jdx, lin_index });
+      handleClickNum();
     } else if (click_num === 1) {
       // -Second date-range click
-      if (date_range_0.date <= d) {
+      if (date_range_0?.date <= d) {
         // -standard case (date-1 <= date-2)
 
         // -Click handlers are applied only to valid region.
@@ -118,10 +119,10 @@ export default function Calendar() {
         // -step 2: set date_range_0 to current values
         setDateRange0({ year, month, date: d, idx, jdx, lin_index });
       }
+      handleClickNum();
     } else if (click_num === 2) {
-      resetDateRangeGUI();
+      resetDateRange();
     }
-    handleClickNum();
   };
 
   // --------------------------------------------
@@ -133,12 +134,14 @@ export default function Calendar() {
   // --------------------------------------------
 
   const dateRangeLogic = (hover_classes_copy) => {
+    const d0_index = date_range_0?.lin_index;
+
     for (let i = 0; i < hover_classes.length; ++i) {
-      if (date_range_0.lin_index < hover_index) {
+      if (d0_index < hover_index) {
         // -Regular case (date_0 <= date_1 [hover])
-        if (date_range_0.lin_index <= i && i <= hover_index) {
+        if (d0_index <= i && i <= hover_index) {
           // -[date_range_0.lin_index, hover_index]
-          if (date_range_0.lin_index === i) {
+          if (d0_index === i) {
             hover_classes_copy[i] = 'col on on-start';
           } else if (i === hover_index) {
             hover_classes_copy[i] = 'col on on-end';
@@ -149,11 +152,11 @@ export default function Calendar() {
           // -[0, date_range_0.lin_index) || (date_range_0.lin_index, 7 * 7 - 1)
           hover_classes_copy[i] = 'col';
         }
-      } else if (hover_index < date_range_0.lin_index) {
+      } else if (hover_index < d0_index) {
         // -Backwards case (date_0 > date_1)
-        if (hover_index <= i && i <= date_range_0.lin_index) {
+        if (hover_index <= i && i <= d0_index) {
           // -[hover_index, date_range_0.lin_index]
-          if (date_range_0.lin_index === i) {
+          if (d0_index === i) {
             hover_classes_copy[i] = 'col on on-end';
           } else if (i === hover_index) {
             hover_classes_copy[i] = 'col on on-start';
@@ -165,7 +168,7 @@ export default function Calendar() {
           hover_classes_copy[i] = 'col';
         }
       } else {
-        if (hover_index === i && i === date_range_0.lin_index) {
+        if (hover_index === i && i === d0_index) {
           // -hovered on the same day as date_0
           hover_classes_copy[i] = 'col on on-start-and-end';
         } else {
